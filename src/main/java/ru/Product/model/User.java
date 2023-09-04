@@ -14,6 +14,8 @@ public class User {
     @Id
     @Column(name = "id")
     private UUID id;
+
+    
     private String name;
     private String email;
     private String phone;
