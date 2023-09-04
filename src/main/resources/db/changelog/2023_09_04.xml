@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="Kate">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM pg_extension WHERE extname='uuid-ossp';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="Kate">
+        <sql>
+            CREATE TABLE IF NOT EXISTS "user" (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            name varchar NOT NULL,
+            email varchar NOT NULL,
+            phone varchar NOT NULL,
+            address varchar,
+            password varchar
+            );
+
+            INSERT INTO "user" (name, email, phone, address, password) VALUES
+            ('Test', 'test@mail.ru', '9009009090', 'Test str.', '123456');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
