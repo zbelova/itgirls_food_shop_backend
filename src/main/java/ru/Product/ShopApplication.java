@@ -3,6 +3,9 @@ package ru.Product;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * author - IT Girls, группа backend3
+ */
 @SpringBootApplication
 public class ShopApplication {
 
