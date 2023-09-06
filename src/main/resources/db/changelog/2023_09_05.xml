@@ -5,18 +5,18 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-<!--    <changeSet id="1" author="Maria">-->
-<!--        <preConditions>-->
-<!--            <sqlCheck expectedResult="0">-->
-<!--                SELECT count(*) FROM pg_extension WHERE extname='uuid-ossp';-->
-<!--            </sqlCheck>-->
-<!--        </preConditions>-->
-<!--        <sql>-->
-<!--            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";-->
-<!--        </sql>-->
-<!--    </changeSet>-->
-
     <changeSet id="1" author="Maria">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM pg_extension WHERE extname='uuid-ossp';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="Maria">
         <sql>
             CREATE TABLE IF NOT EXISTS "user" (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
