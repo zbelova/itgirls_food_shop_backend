@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="Maria">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM pg_extension WHERE extname='uuid-ossp';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="Maria">
+        <sql>
+            CREATE TABLE IF NOT EXISTS "user" (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            name varchar NOT NULL,
+            email varchar NOT NULL,
+            phone varchar NOT NULL,
+            address varchar,
+            password varchar
+            );
+            CREATE TABLE IF NOT EXISTS "category" (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            name varchar NOT NULL,
+            image varchar
+            );
+            CREATE TABLE IF NOT EXISTS "product" (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            name varchar NOT NULL,
+            description text,
+            image varchar,
+            price integer NOT NULL,
+            quantity integer NOT NULL,
+            category_id integer NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS "order" (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            products integer[] NOT NULL,
+            date_time timestamp NOT NULL,
+            total_price integer NOT NULL,
+            status varchar NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS "chat_message" (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            user_id integer NOT NULL,
+            message_type varchar NOT NULL,
+            message_content text NOT NULL,
+            date_time timestamp NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS "payment" (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            user_id integer NOT NULL,
+            order_id integer NOT NULL,
+            price integer NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS "product_order" (
+            order_id integer NOT NULL,
+            product_id integer NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS "user_order" (
+            user_id integer NOT NULL,
+            order_id integer NOT NULL
+            );
+
+
+<!--            INSERT INTO "user" (name, email, phone, address, password) VALUES-->
+<!--            ('Test', 'test@mail.ru', '9009009090', 'Test str.', '123456');-->
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
