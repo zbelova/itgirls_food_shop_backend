@@ -8,6 +8,8 @@
     <changeSet id="1" author="Maria">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
+<!--              Этот код фрагмента Liquibase формирует проверку (<sqlCheck>)
+                  для проверки существования расширения uuid-ossp в базе данных PostgreSQL -->
                 SELECT count(*) FROM pg_extension WHERE extname='uuid-ossp';
             </sqlCheck>
         </preConditions>
@@ -26,11 +28,13 @@
             address varchar,
             password varchar
             );
+
             CREATE TABLE IF NOT EXISTS "category" (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
             name varchar NOT NULL,
             image varchar
             );
+
             CREATE TABLE IF NOT EXISTS "product" (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
             name varchar NOT NULL,
@@ -38,40 +42,51 @@
             image varchar,
             price integer NOT NULL,
             quantity integer NOT NULL,
-            category_id integer NOT NULL
+            category_id uuid NOT NULL,
+            FOREIGN KEY (category_id) REFERENCES category (id)
             );
+
             CREATE TABLE IF NOT EXISTS "order" (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
             products integer[] NOT NULL,
             date_time timestamp NOT NULL,
             total_price integer NOT NULL,
-            status varchar NOT NULL
+            status varchar NOT NULL,
+            user_id uuid NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES "user" (id)
             );
+
             CREATE TABLE IF NOT EXISTS "chat_message" (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-            user_id integer NOT NULL,
             message_type varchar NOT NULL,
             message_content text NOT NULL,
-            date_time timestamp NOT NULL
+            date_time timestamp NOT NULL,
+            user_id uuid NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES "user" (id)
             );
+
             CREATE TABLE IF NOT EXISTS "payment" (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-            user_id integer NOT NULL,
-            order_id integer NOT NULL,
-            price integer NOT NULL
+            user_id uuid NOT NULL,
+            order_id uuid NOT NULL,
+            price integer NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES "user" (id),
+            FOREIGN KEY (order_id) REFERENCES "order" (id)
             );
             CREATE TABLE IF NOT EXISTS "product_order" (
-            order_id integer NOT NULL,
-            product_id integer NOT NULL
+            order_id uuid NOT NULL,
+            product_id uuid NOT NULL,
+            quantity integer NOT NULL,
+            FOREIGN KEY (order_id) REFERENCES "order" (id),
+            FOREIGN KEY (product_id) REFERENCES product (id)
             );
-            CREATE TABLE IF NOT EXISTS "user_order" (
-            user_id integer NOT NULL,
-            order_id integer NOT NULL
-            );
+<!--            CREATE TABLE IF NOT EXISTS "user_order" (-->
+<!--            user_id uuid NOT NULL,-->
+<!--            order_id uuid NOT NULL-->
+<!--            FOREIGN KEY (user_id) REFERENCES user (id),-->
+<!--            FOREIGN KEY (order_id) REFERENCES order (id)-->
+<!--            );-->
 
-
-<!--            INSERT INTO "user" (name, email, phone, address, password) VALUES-->
-<!--            ('Test', 'test@mail.ru', '9009009090', 'Test str.', '123456');-->
         </sql>
     </changeSet>
 

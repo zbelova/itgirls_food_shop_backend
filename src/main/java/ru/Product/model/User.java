@@ -1,12 +1,10 @@
 package ru.Product.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
+import java.util.Set;
 import java.util.UUID;
 
 // TODO добавить связь с таблицей заказов, так же пользователь будет связан с корзиной
@@ -34,5 +32,13 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_order",
+            inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
+    private Set<Order> orders;
 
 }
