@@ -2,6 +2,7 @@ package ru.Product.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "user")
 @Data
+@Builder
 public class User {
 
     @Id

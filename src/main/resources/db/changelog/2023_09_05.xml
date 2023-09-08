@@ -56,14 +56,14 @@
             FOREIGN KEY (user_id) REFERENCES "user" (id)
             );
 
-            CREATE TABLE IF NOT EXISTS "chat_message" (
-            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-            message_type varchar NOT NULL,
-            message_content text NOT NULL,
-            date_time timestamp NOT NULL,
-            user_id uuid NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES "user" (id)
-            );
+<!--            CREATE TABLE IF NOT EXISTS "chat_message" (-->
+<!--            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),-->
+<!--            message_type varchar NOT NULL,-->
+<!--            message_content text NOT NULL,-->
+<!--            date_time timestamp NOT NULL,-->
+<!--            user_id uuid NOT NULL,-->
+<!--            FOREIGN KEY (user_id) REFERENCES "user" (id)-->
+<!--            );-->
 
             CREATE TABLE IF NOT EXISTS "payment" (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -79,13 +79,7 @@
             quantity integer NOT NULL,
             FOREIGN KEY (order_id) REFERENCES "order" (id),
             FOREIGN KEY (product_id) REFERENCES product (id)
-            );
-<!--            CREATE TABLE IF NOT EXISTS "user_order" (-->
-<!--            user_id uuid NOT NULL,-->
-<!--            order_id uuid NOT NULL-->
-<!--            FOREIGN KEY (user_id) REFERENCES user (id),-->
-<!--            FOREIGN KEY (order_id) REFERENCES order (id)-->
-<!--            );-->
+
 
         </sql>
     </changeSet>

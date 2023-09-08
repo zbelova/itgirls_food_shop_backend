@@ -1,33 +1,29 @@
 package ru.Product.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 
+import java.math.BigDecimal;
 import java.util.UUID;
 @Entity
 @Data
 @Table(name = "payment")
 @Builder
-@Getter
 public class Payment {
     @Id
     @Column(name = "id")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "order_id")
-    @Setter
-    private Integer orderId;
+    @ManyToOne()
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     @Column(name = "price")
-    @Setter
-    private Integer price;
+    private BigDecimal price;
 }
