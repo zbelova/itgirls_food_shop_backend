@@ -12,7 +12,6 @@ import ru.Product.dto.UserDto;
 import ru.Product.dto.UserUpdateDto;
 import ru.Product.model.User;
 import ru.Product.repository.UserRepository;
-import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.UUID;
 
