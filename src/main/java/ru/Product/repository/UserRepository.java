@@ -13,12 +13,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<User,UUID> {
- User findByEmail(String email);
- List<User> findByName(String name);
+public interface UserRepository extends JpaRepository<User, UUID> {
+    User findByEmail(String email);
 
-    @Query("UPDATE AppUser u SET u.lastLogin=:lastLogin WHERE u.username = ?#{ principal?.username }")
-    @Modifying
-    @Transactional
-    void updateLastLogin(@Param("lastLogin") Date lastLogin);
+    List<User> findByName(String name);
+
+//    @Query("UPDATE AppUser u SET u.lastLogin=:lastLogin WHERE u.username = ?#{ principal?.username }")
+//    @Modifying
+//    @Transactional
+//    void updateLastLogin(@Param("lastLogin") Date lastLogin);
 }
