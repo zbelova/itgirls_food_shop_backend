@@ -79,7 +79,7 @@
             quantity integer NOT NULL,
             FOREIGN KEY (order_id) REFERENCES "order" (id),
             FOREIGN KEY (product_id) REFERENCES product (id)
-
+            );
 
         </sql>
     </changeSet>
