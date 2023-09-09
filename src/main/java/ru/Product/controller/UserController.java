@@ -13,7 +13,6 @@ import ru.Product.dto.UserUpdateDto;
 import ru.Product.model.User;
 import ru.Product.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import ru.Product.service.UserService;
 
 import java.util.UUID;
 
@@ -27,23 +26,25 @@ public class UserController {
     private final UserService userService;
 
     @Operation(summary = "signUp(User user) - регистрация. Сейчас используется простая регистрация через почтовый ящик, подтверждения адреса почты нет")
-    @PostMapping("/api/v1/signUp")
+    @PostMapping("/user/sign_up")
     UserDto signUp(@RequestBody UserDto userCreateDto) {
+        //TODO UserService.createUser
         return userService.createUser(userCreateDto);
     }
 
 
     @Operation(summary = "login(String email, String password) - авторизация")
-    @GetMapping("/api/v1/login")
-    UserDto login(@RequestParam(name = "email") String email, @RequestParam String password) {
-        return userService.getUserByEmail(email);
+    @GetMapping("/user/sign_ip")
+    UserDto login(@RequestBody SignInDto signInDto) {
+        //TODO UserService.signIn
+        return userService.signIn(signInDto);
     }
 
 
 
 
     @Operation(summary = "   updateUser(User user) - редактировать данные пользователя. Почтовый ящик сейчас поменять нельзя, потому что подтвердить изменение нельзя через почту. Пароль тоже нельзя. Но можем сделать просто смену почтового адреса и пароля в форме")
-    @PutMapping("/api/v1/updateUser")
+    @PutMapping("/user/updateUser")
     UserDto updateUser(@RequestBody UserUpdateDto userCreateDto) {
         //TODO UserService.updateUser
         return userService.updateUser(userCreateDto);
@@ -51,14 +52,26 @@ public class UserController {
 
 
     @Operation(summary = "logout() - разлогиниться")
-    @GetMapping("/api/v1/logout")
+    @GetMapping("/logout")
     String getAuthorsView(Model model) {
-        return "redirect: /";
+        model.addAttribute("users", userService.getAllUsers());
+        return "users";
 }
     @Operation(summary = "getUser() - получить данные текущего авторизованного пользователя")
-    @GetMapping("/api/v1/getUser/{id}")
-    UserDto getUser(@RequestParam("id") UUID id) {
+    @GetMapping("/users/{id}")
+    UserDto getUser(@PathVariable("id") UUID id) {
         //TODO UserService.findById
        return userService.findById(id);
 }
+
+
 }
+
+
+//    @GetMapping("/get")
+//    @Operation(summary = "Получение пользователя по id")
+//    public User getUser(
+//            @Parameter(description = "id пользователя", required = true) @RequestParam(value = "id") String id
+//    ) {
+//        return null;
+//    }
