@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="Maria">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <!--              Этот код фрагмента Liquibase формирует проверку (<sqlCheck>)
+                                  для проверки существования расширения uuid-ossp в базе данных PostgreSQL -->
+                SELECT count(*) FROM pg_extension WHERE extname='uuid-ossp';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        </sql>
+    </changeSet>
+    <changeSet id="2" author="Maria">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Молочные продукты'
+            );
+
+            Insert into product("id", "name", description, image, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Молоко Parmalat',
+            '1 литр',
+            'https://firebasestorage.googleapis.com/v0/b/mobile-4e919.appspot',
+            120,
+            4,
+            (select category.id from category where category.name = 'Молочные продукты')
+            );
+
+            Insert into "user"("id","name", email, phone, address, password) values
+            (uuid_generate_v4(),
+            'Ivan',
+            'ivan@mail.ru',
+            '+79998887766',
+            'Moscow',
+            '1234'
+            );
+
+            Insert into "order"("id", products, date_time, total_price, status, user_id) values
+            (uuid_generate_v4(),
+            ARRAY[(select "id" from product where product.name = 'Молоко Parmalat')],
+            CURRENT_TIMESTAMP,
+            120,
+            'Processed',
+            (select "id" from "user" where name = 'Ivan')
+            );
+
+
+
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
