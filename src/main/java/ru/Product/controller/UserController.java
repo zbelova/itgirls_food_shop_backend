@@ -8,7 +8,7 @@ import ru.Product.model.User;
 
 @RestController
 @RequestMapping("api/v1/user")
-@SecurityRequirement(name = "library-users")
+@SecurityRequirement(name = "Пользователи")
 public class UserController {
 
     @GetMapping("/get")
