@@ -48,7 +48,7 @@
 
             CREATE TABLE IF NOT EXISTS "order" (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-            products integer[] NOT NULL,
+            products uuid[] NOT NULL,
             date_time timestamp NOT NULL,
             total_price integer NOT NULL,
             status varchar NOT NULL,
