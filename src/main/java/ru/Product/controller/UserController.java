@@ -26,7 +26,7 @@ public class UserController {
     private final UserService userService;
 
     @Operation(summary = "signUp(User user) - регистрация. Сейчас используется простая регистрация через почтовый ящик, подтверждения адреса почты нет")
-    @PostMapping("/signUp")
+    @PostMapping("/user/sign_up")
     UserDto signUp(@RequestBody UserDto userCreateDto) {
         //TODO UserService.createUser
         return userService.createUser(userCreateDto);
@@ -34,7 +34,7 @@ public class UserController {
 
 
     @Operation(summary = "login(String email, String password) - авторизация")
-    @GetMapping("/login")
+    @GetMapping("/user/sign_ip")
     UserDto login(@RequestBody SignInDto signInDto) {
         //TODO UserService.signIn
         return userService.signIn(signInDto);
@@ -44,7 +44,7 @@ public class UserController {
 
 
     @Operation(summary = "   updateUser(User user) - редактировать данные пользователя. Почтовый ящик сейчас поменять нельзя, потому что подтвердить изменение нельзя через почту. Пароль тоже нельзя. Но можем сделать просто смену почтового адреса и пароля в форме")
-    @PutMapping("/updateUser")
+    @PutMapping("/user/updateUser")
     UserDto updateUser(@RequestBody UserUpdateDto userCreateDto) {
         //TODO UserService.updateUser
         return userService.updateUser(userCreateDto);
@@ -58,7 +58,7 @@ public class UserController {
         return "users";
 }
     @Operation(summary = "getUser() - получить данные текущего авторизованного пользователя")
-    @GetMapping("/getUser/{id}")
+    @GetMapping("/users/{id}")
     UserDto getUser(@PathVariable("id") UUID id) {
         //TODO UserService.findById
        return userService.findById(id);
