@@ -2,17 +2,21 @@ package ru.Product.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 import java.util.UUID;
 
 // TODO добавить связь с таблицей заказов, так же пользователь будет связан с корзиной
 @Entity
-@Table(name = "user")
+@Table(name="\"user\"")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -35,12 +39,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_order",
-            inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
-    )
+    @OneToMany(mappedBy = "user")
     private Set<Order> orders;
 
 }

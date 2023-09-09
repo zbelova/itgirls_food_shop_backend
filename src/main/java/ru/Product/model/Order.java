@@ -1,29 +1,32 @@
 package ru.Product.model;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.List;
 @Entity
-@Table(name="order")
+@Table(name="\"order\"")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
     @Id
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "product_id")
-    @ElementCollection
-    @CollectionTable(
+    @ManyToMany
+    @JoinTable(
             name = "product_order",
-            joinColumns = @JoinColumn(name = "order_id")
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private List<UUID> productIds;
-
+    private List<Product> product;
 
     @Column(name = "date_time")
     private LocalDate dateTime;
@@ -34,7 +37,7 @@ public class Order {
     @Column(name = "status")
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
