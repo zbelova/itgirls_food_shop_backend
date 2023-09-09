@@ -12,6 +12,7 @@ import ru.Product.dto.UserDto;
 import ru.Product.dto.UserUpdateDto;
 import ru.Product.model.User;
 import ru.Product.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.UUID;
 
@@ -24,8 +25,7 @@ public class UserController {
     //TODO UserService
     private final UserService userService;
 
-
-//    signUp(User user) - регистрация. Сейчас используется простая регистрация через почтовый ящик, подтверждения адреса почты нет
+    @Operation(summary = "signUp(User user) - регистрация. Сейчас используется простая регистрация через почтовый ящик, подтверждения адреса почты нет")
     @PostMapping("/user/sign_up")
     UserDto signUp(@RequestBody UserDto userCreateDto) {
         //TODO UserService.createUser
@@ -33,7 +33,7 @@ public class UserController {
     }
 
 
-    //    login(String email, String password) - авторизация
+    @Operation(summary = "login(String email, String password) - авторизация")
     @GetMapping("/user/sign_ip")
     UserDto login(@RequestBody SignInDto signInDto) {
         //TODO UserService.signIn
@@ -43,11 +43,7 @@ public class UserController {
 
 
 
-    //    updateUser(User user) -
-    //    редактировать данные пользователя.
-    //    Почтовый ящик сейчас поменять нельзя,
-    //    потому что подтвердить изменение нельзя через почту.
-    //    Пароль тоже нельзя. Но можем сделать просто смену почтового адреса и пароля в форме
+    @Operation(summary = "   updateUser(User user) - редактировать данные пользователя. Почтовый ящик сейчас поменять нельзя, потому что подтвердить изменение нельзя через почту. Пароль тоже нельзя. Но можем сделать просто смену почтового адреса и пароля в форме")
     @PutMapping("/user/updateUser")
     UserDto updateUser(@RequestBody UserUpdateDto userCreateDto) {
         //TODO UserService.updateUser
@@ -55,13 +51,13 @@ public class UserController {
     }
 
 
-//    logout() - разлогиниться
+    @Operation(summary = "logout() - разлогиниться")
     @GetMapping("/logout")
     String getAuthorsView(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         return "users";
 }
-//    getUser() - получить данные текущего авторизованного пользователя
+    @Operation(summary = "getUser() - получить данные текущего авторизованного пользователя")
     @GetMapping("/users/{id}")
     UserDto getUser(@PathVariable("id") UUID id) {
         //TODO UserService.findById
