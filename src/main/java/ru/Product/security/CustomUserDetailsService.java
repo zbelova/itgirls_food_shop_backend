@@ -1,4 +1,4 @@
-package ru.Product.security;
+/**package ru.Product.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,3 +24,4 @@ public class CustomUserDetailsService implements UserDetailsService {
     return new AppUserPrincipal(user);
     }
 }
+*/

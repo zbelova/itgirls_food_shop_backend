@@ -1,4 +1,4 @@
-package ru.Product.config;
+/**package ru.Product.config;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,3 +92,4 @@ public class SpringSecurityConfig {
         return new BCryptPasswordEncoder(11);
     }
 }
+*/

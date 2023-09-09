@@ -1,4 +1,4 @@
-package ru.Product.security;
+/**package ru.Product.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,3 +19,4 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         userRepository.updateLastLogin(new Date());
     }
 }
+*/
