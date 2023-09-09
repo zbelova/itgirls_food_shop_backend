@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 import ru.Product.model.User;
 
+@RestController
+@RequestMapping("api/v1/user")
 @SecurityRequirement(name = "library-users")
 public class UserController {
 
