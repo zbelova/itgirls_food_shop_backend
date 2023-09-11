@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Фрукты'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="2" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Овощи'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="3" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Хлебобулочные изделия'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="4" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Бакалея'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="5" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Макаронные изделия'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="6" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Рыба'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="7" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Яйца'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="8" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Бобовые'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="9" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Орехи'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="10" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Грибы'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="11" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Выпечка'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="12" author="Kate">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Напитки'
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
