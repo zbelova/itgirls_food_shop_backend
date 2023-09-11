@@ -7,10 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 // TODO добавить связь с таблицей заказов, так же пользователь будет связан с корзиной
+
+
 @Entity
 @Table(name="\"user\"")
 @Data
@@ -41,5 +44,21 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Order> orders;
+
+
+        @OneToOne(cascade = CascadeType.ALL)
+        @JoinColumn(name = "cart_id", referencedColumnName = "id")
+        private Cart cart;
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+
+
 
 }
