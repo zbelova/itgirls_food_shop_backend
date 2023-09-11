@@ -19,17 +19,17 @@ public class User {
     @Id
     @Column(name = "id")
     private UUID id;
-    @Setter
+
     @Column(name = "name")
     private String name;
 
     @Column(name = "email")
     private String email;
-    @Setter
+
     @Column(name = "phone")
     @Pattern(regexp = "\\d{10}", message = "Номер телефона должен содержать 10 цифр") // один из вариантов валидации в БД
     private String phone;
-    @Setter
+
     @Column(name = "address")
     private String address;
 
