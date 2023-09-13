@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="1" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Картофель',
+            '1 кг, молодой белый',
+            100,
+            2,
+            (select category.id from category where category.name = 'Овощи')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="2" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Йогурт Danone Клубника-земляника',
+            '2.8% 260г',
+            100,
+            6,
+            (select category.id from category where category.name = 'Молочные продукты')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="3" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Помидоры',
+            '500 г',
+            150,
+            5,
+            (select category.id from category where category.name = 'Овощи')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="4" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Перец сладкий',
+            '500 г, желтый',
+            150,
+            2,
+            (select category.id from category where category.name = 'Овощи')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="5" author="Maria">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Мясо'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="6" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Говядина',
+            '400 г',
+            350,
+            10,
+            (select category.id from category where category.name = 'Мясо')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="7" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Персики',
+            '600 г, Турция',
+            250,
+            1,
+            (select category.id from category where category.name = 'Фрукты')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="8" author="Maria">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Сладости'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="9" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Печенье Oreo',
+            '200 г, 5 + 1 в подарок',
+            250,
+            3,
+            (select category.id from category where category.name = 'Сладости')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="10" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Яблоки Голден',
+            '500 г',
+            120,
+            4,
+            (select category.id from category where category.name = 'Фрукты')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="11" author="Maria">
+        <sql>
+            Insert into category("id", "name") values
+            (
+            uuid_generate_v4(),
+            'Консервированное'
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="12" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Огурчики маринованные, Дядя Ваня',
+            '400 г',
+            170,
+            3,
+            (select category.id from category where category.name = 'Консервированное')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="13" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Хлеб бородинский, Коломенское',
+            '450 г',
+            60,
+            5,
+            (select category.id from category where category.name = 'Хлебобулочные изделия')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="14" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Бананы',
+            '5 штук, спелые',
+            100,
+            2,
+            (select category.id from category where category.name = 'Фрукты')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="15" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Сливы',
+            '500 г, Краснодарские',
+            150,
+            5,
+            (select category.id from category where category.name = 'Фрукты')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="16" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Капуста',
+            '700г, кочан',
+            80,
+            25,
+            (select category.id from category where category.name = 'Овощи')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="17" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Огурцы',
+            '500 г, фермерские крупные',
+            70,
+            4,
+            (select category.id from category where category.name = 'Овощи')
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="18" author="Maria">
+        <sql>
+            Insert into product("id", "name", description, price, quantity, category_id) values
+            (uuid_generate_v4(),
+            'Дорадо',
+            '300г',
+            400,
+            6,
+            (select category.id from category where category.name = 'Рыба')
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -22,4 +22,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 //    @Modifying
 //    @Transactional
 //    void updateLastLogin(@Param("lastLogin") Date lastLogin);
+
+    Optional<User> findUserByEmail(String email);
+
+    Optional<User> findUserByName(String name);
 }
