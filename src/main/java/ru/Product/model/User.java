@@ -46,19 +46,5 @@ public class User {
     private Set<Order> orders;
 
 
-        @OneToOne(cascade = CascadeType.ALL)
-        @JoinColumn(name = "cart_id", referencedColumnName = "id")
-        private Cart cart;
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-
-
 
 }
