@@ -13,6 +13,7 @@ import ru.Product.dto.UserUpdateDto;
 import ru.Product.model.User;
 import ru.Product.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
+import ru.Product.service.UserService;
 
 import java.util.UUID;
 
@@ -28,16 +29,14 @@ public class UserController {
     @Operation(summary = "signUp(User user) - регистрация. Сейчас используется простая регистрация через почтовый ящик, подтверждения адреса почты нет")
     @PostMapping("/api/v1/signUp")
     UserDto signUp(@RequestBody UserDto userCreateDto) {
-        //TODO UserService.createUser
         return userService.createUser(userCreateDto);
     }
 
 
     @Operation(summary = "login(String email, String password) - авторизация")
     @GetMapping("/api/v1/login")
-    UserDto login(@RequestBody SignInDto signInDto) {
-        //TODO UserService.signIn
-        return userService.signIn(signInDto);
+    UserDto login(@RequestParam(name = "email") String email, @RequestParam String password) {
+        return userService.getUserByEmail(email);
     }
 
 
@@ -54,24 +53,12 @@ public class UserController {
     @Operation(summary = "logout() - разлогиниться")
     @GetMapping("/api/v1/logout")
     String getAuthorsView(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
-        return "users";
+        return "redirect: /";
 }
     @Operation(summary = "getUser() - получить данные текущего авторизованного пользователя")
     @GetMapping("/api/v1/getUser/{id}")
-    UserDto getUser(@PathVariable("id") UUID id) {
+    UserDto getUser(@RequestParam("id") UUID id) {
         //TODO UserService.findById
        return userService.findById(id);
 }
-
-
 }
-
-
-//    @GetMapping("/get")
-//    @Operation(summary = "Получение пользователя по id")
-//    public User getUser(
-//            @Parameter(description = "id пользователя", required = true) @RequestParam(value = "id") String id
-//    ) {
-//        return null;
-//    }
