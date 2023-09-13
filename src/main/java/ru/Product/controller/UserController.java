@@ -12,6 +12,7 @@ import ru.Product.dto.UserDto;
 import ru.Product.dto.UserUpdateDto;
 import ru.Product.model.User;
 import ru.Product.repository.UserRepository;
+import ru.Product.service.UserService;
 
 import java.util.UUID;
 
@@ -27,16 +28,15 @@ public class UserController {
     @Operation(summary = "signUp(User user) - регистрация. Сейчас используется простая регистрация через почтовый ящик, подтверждения адреса почты нет")
     @PostMapping("/api/v1/signUp")
     UserDto signUp(@RequestBody UserDto userCreateDto) {
-        //TODO UserService.createUser
         return userService.createUser(userCreateDto);
     }
 
 
     @Operation(summary = "login(String email, String password) - авторизация")
     @GetMapping("/api/v1/login")
-    UserDto login(@RequestBody SignInDto signInDto) {
-        //TODO UserService.signIn
-        return userService.signIn(signInDto);
+    UserDto login(@RequestParam(name = "email") String email, @RequestParam String password) {
+        //return userService.signIn(signInDto);
+        return userService.getUserByEmail(email);
     }
 
 
@@ -45,7 +45,6 @@ public class UserController {
     @Operation(summary = "   updateUser(User user) - редактировать данные пользователя. Почтовый ящик сейчас поменять нельзя, потому что подтвердить изменение нельзя через почту. Пароль тоже нельзя. Но можем сделать просто смену почтового адреса и пароля в форме")
     @PutMapping("/api/v1/updateUser")
     UserDto updateUser(@RequestBody UserUpdateDto userCreateDto) {
-        //TODO UserService.updateUser
         return userService.updateUser(userCreateDto);
     }
 
