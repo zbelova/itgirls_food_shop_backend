@@ -1,17 +1,13 @@
 package ru.Product.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.Product.dto.SignInDto;
 import ru.Product.dto.UserDto;
 import ru.Product.dto.UserUpdateDto;
-import ru.Product.model.User;
-import ru.Product.repository.UserRepository;
+import ru.Product.service.UserService;
 
 import java.util.UUID;
 
@@ -34,9 +30,9 @@ public class UserController {
 
     @Operation(summary = "login(String email, String password) - авторизация")
     @GetMapping("/user/sign_ip")
-    UserDto login(@RequestBody SignInDto signInDto) {
+    UserDto login(@RequestParam("email") String email, @RequestParam String password) {
         //TODO UserService.signIn
-        return userService.signIn(signInDto);
+        return userService.getUserByEmail(email);
     }
 
 
@@ -53,8 +49,7 @@ public class UserController {
     @Operation(summary = "logout() - разлогиниться")
     @GetMapping("/logout")
     String getAuthorsView(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
-        return "users";
+        return "redirect: /";
 }
     @Operation(summary = "getUser() - получить данные текущего авторизованного пользователя")
     @GetMapping("/users/{id}")
@@ -65,12 +60,3 @@ public class UserController {
 
 
 }
-
-
-//    @GetMapping("/get")
-//    @Operation(summary = "Получение пользователя по id")
-//    public User getUser(
-//            @Parameter(description = "id пользователя", required = true) @RequestParam(value = "id") String id
-//    ) {
-//        return null;
-//    }

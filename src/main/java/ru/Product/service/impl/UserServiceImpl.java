@@ -49,6 +49,13 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
+    @Override
+    public UserDto findById(UUID id) {
+        User user = userRepository.findById(id).orElseThrow();
+        UserDto userDto = convertEntityToDto(user);
+        return userDto;
+    }
+
     private UserDto convertEntityToDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
