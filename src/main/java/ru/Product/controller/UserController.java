@@ -1,6 +1,7 @@
 package ru.Product.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
@@ -52,8 +53,8 @@ public class UserController {
         return "redirect: /";
 }
     @Operation(summary = "getUser() - получить данные текущего авторизованного пользователя")
-    @GetMapping("/getUser/{id}")
-    UserDto getUser(@PathVariable("id") UUID id) {
+    @GetMapping("/getUser")
+    UserDto getUser(@RequestParam("id") UUID id) {
         //TODO UserService.findById
        return userService.findById(id);
 }
