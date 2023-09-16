@@ -8,9 +8,13 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import java.util.Set;
 >>>>>>> 9b8303b (0000)
+=======
+import java.util.Set;
+>>>>>>> origin/b2
 import java.util.UUID;
 import java.util.List;
 @Entity
@@ -46,9 +50,15 @@ public class Order {
     private User user;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
     public void setProducts(Set<Product> keySet) {
     }
 >>>>>>> 9b8303b (0000)
+=======
+
+    public void setProducts(Set<Product> keySet) {
+    }
+>>>>>>> origin/b2
 }

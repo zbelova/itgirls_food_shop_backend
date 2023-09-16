@@ -4,9 +4,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.Product.model.Order;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import ru.Product.model.User;
 >>>>>>> 9b8303b (0000)
+=======
+import ru.Product.model.User;
+>>>>>>> origin/b2
 
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +21,11 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     List<Order> findAllByUserId(UUID userId);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     List<Order> findByUser(User user);
 >>>>>>> 9b8303b (0000)
+=======
+    List<Order> findByUser(User user);
+>>>>>>> origin/b2
 }

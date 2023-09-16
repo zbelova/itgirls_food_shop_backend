@@ -1,6 +1,7 @@
 package ru.Product.controller;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -59,6 +60,8 @@ public class CartController {
     ) {
         return null;
 =======
+=======
+>>>>>>> origin/b2
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -92,6 +95,9 @@ public class CartController {
     public String add(Product product) {
         productCart.add(product);
         return "redirect:/";
+<<<<<<< HEAD
 >>>>>>> 9b8303b (0000)
+=======
+>>>>>>> origin/b2
     }
 }

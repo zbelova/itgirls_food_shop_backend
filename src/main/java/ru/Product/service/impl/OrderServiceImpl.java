@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.Product.dto.*;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import ru.Product.model.Category;
 import ru.Product.model.Order;
 import ru.Product.model.Product;
@@ -11,19 +12,28 @@ import ru.Product.model.User;
 import ru.Product.repository.OrderRepository;
 import ru.Product.repository.ProductRepository;
 =======
+=======
+>>>>>>> origin/b2
 import ru.Product.model.*;
 import ru.Product.repository.OrderRepository;
 import ru.Product.repository.ProductRepository;
 import ru.Product.service.CartService;
+<<<<<<< HEAD
 >>>>>>> 9b8303b (0000)
+=======
+>>>>>>> origin/b2
 import ru.Product.service.OrderService;
 
 import java.util.ArrayList;
 import java.util.List;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import java.util.Map;
 >>>>>>> 9b8303b (0000)
+=======
+import java.util.Map;
+>>>>>>> origin/b2
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -152,9 +162,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 }
 =======
+=======
+>>>>>>> origin/b2
         private final CartService cartService;
 
 
@@ -185,4 +198,7 @@ public class OrderServiceImpl implements OrderService {
 
 
 
+<<<<<<< HEAD
 >>>>>>> 9b8303b (0000)
+=======
+>>>>>>> origin/b2
