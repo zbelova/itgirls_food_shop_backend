@@ -1,5 +1,6 @@
 package ru.Product.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.Product.model.Product;
 import ru.Product.service.CartService;
@@ -8,13 +9,10 @@ import ru.Product.service.ProductService;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class CartServiceImpl implements ProductService {
 
     private final ProductService productService;
-
-    public CartServiceImpl(ProductService productService) {
-        this.productService = productService;
-    }
 
     // Добавить продукт в корзину по UUID
     public void addProductToCart(CartService cart, String productUUID) {

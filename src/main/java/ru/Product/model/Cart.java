@@ -1,26 +1,11 @@
 package ru.Product.model;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import jakarta.persistence.*;
->>>>>>> 9b8303b (0000)
-=======
-import jakarta.persistence.*;
->>>>>>> origin/b2
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import ru.Product.service.ProductService;
->>>>>>> 9b8303b (0000)
-=======
-import ru.Product.service.ProductService;
->>>>>>> origin/b2
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -30,8 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Component
 @SessionScope
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 public class Cart {
     private final Map<String, Integer> cartItems = new HashMap<>(); // Используем айди продукта как ключ и количество как значение
@@ -46,10 +29,8 @@ public class Cart {
         int itemCount = cartItems.getOrDefault(productId, 0);
         if (itemCount > 0) {
             cartItems.put(productId, itemCount - 1);
-=======
-=======
->>>>>>> origin/b2
-@Table(name = "carts")
+
+
 public class Cart implements ProductService {
     private final Map<String, Integer> cartItems = new HashMap<>(); // Используем айди продукта как ключ и количество как значение
     private Set<Product> product;

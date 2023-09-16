@@ -1,7 +1,5 @@
 package ru.Product.controller;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.Product.dto.CategoryDto;
 import ru.Product.dto.ProductDto;
+import ru.Product.model.Cart;
 
 import java.util.List;
 
@@ -21,6 +20,7 @@ import java.util.List;
 @SecurityRequirement(name = "Корзина")
 @RequiredArgsConstructor
 public class CartController {
+    private final Cart productCart;
 
     @PostMapping("/addProductToCart")
     @Operation(summary = "Добавить продукт в корзину по id")
@@ -59,26 +59,7 @@ public class CartController {
             @Parameter(description = "id продуктов", required = true) @RequestParam List<String> id
     ) {
         return null;
-=======
-=======
->>>>>>> origin/b2
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
-import ru.Product.model.Product;
-import ru.Product.model.Cart;
 
-import java.util.Set;
-import java.util.UUID;
-
-@AllArgsConstructor
-@Controller
-public class CartController {
-
-    private final Cart productCart;
 
     @GetMapping("/")
     public ModelAndView get(Model model) {
@@ -95,9 +76,5 @@ public class CartController {
     public String add(Product product) {
         productCart.add(product);
         return "redirect:/";
-<<<<<<< HEAD
->>>>>>> 9b8303b (0000)
-=======
->>>>>>> origin/b2
-    }
+
 }
