@@ -9,25 +9,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.Product.dto.CategoryDto;
+import ru.Product.dto.ProductAndPriceDto;
+import ru.Product.dto.ProductAndQuantityDto;
 import ru.Product.dto.ProductDto;
+import ru.Product.service.CartService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/cart")
 @SecurityRequirement(name = "Корзина")
 @RequiredArgsConstructor
 public class CartController {
+    private final CartService cartService;
 
-    private final Cart productCart;
 
     @PostMapping("/addProductToCart")
     @Operation(summary = "Добавить продукт в корзину по id")
-    public ProductDto addProductToCart(
+    public void addProductToCart(
             @Parameter(description = "id продукта", required = true) @RequestParam String id
     ) {
-        return null;
+        cartService.addProduct(UUID.fromString(id));
     }
 
     @PostMapping("/removeProductFromCart")
@@ -35,40 +38,25 @@ public class CartController {
     public void removeProductFromCart(
             @Parameter(description = "id продукта", required = true) @RequestParam String id
     ) {
+        cartService.removeProduct(UUID.fromString(id));
     }
 
     @PostMapping("/removeAllProductsFromCart")
     @Operation(summary = "Убрать все продукты из корзины")
     public void removeAllProductsFromCart() {
+        cartService.clear();
     }
 
     @GetMapping("/getCart")
-    @Operation(summary = "Получить все продукты в корзине с общей ценой по id пользователя")
-    public List<ProductDto> getCart(
-            @Parameter(description = "id пользователя", required = true) @RequestParam String id
-    ) {
-        return null;
+    @Operation(summary = "Получить все продукты в корзине с общей ценой")
+    public List<ProductAndPriceDto> getCart() {
+        return cartService.getCartItemsPrice();
     }
 
-    // имеется ввиду поле Integer quantity в продуктах
-    // лучше под этот метод сделать отдельную DTO: id, name и quantity
-    // обрати внимание, на вход ждём List айди
     @GetMapping("/getProductsInStock")
     @Operation(summary = "По списку продуктов получить количество в наличии")
-    public List<CategoryDto> getProductsInStock(
-            @Parameter(description = "id продуктов", required = true) @RequestParam List<String> id
-    ) {
-        return null;
+    public List<ProductAndQuantityDto> getProductsInStock() {
+        return cartService.getCartItemsQuantity();
     }
 
-    @GetMapping("/")
-    public ModelAndView get(Model model) {
-        Set<Product> products = productCart.getProduct();
-
-        ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("products", products);
-        modelAndView.addObject("product", new Product());
-
-        return modelAndView;
-    }
 }
