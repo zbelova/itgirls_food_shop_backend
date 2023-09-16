@@ -16,7 +16,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = userRepository.save(convertDtoToEntity(userDto));
@@ -38,8 +37,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByName(String name) {
         User user = userRepository.findUserByName(name).orElseThrow();
-        UserDto uSerDto = convertEntityToDto(user);
-        return uSerDto;
+        UserDto userDto = convertEntityToDto(user);
+        return userDto;
     }
 
     @Override
