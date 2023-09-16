@@ -1,5 +1,13 @@
 package ru.Product.model;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,18 +15,11 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import java.util.Set;
->>>>>>> 9b8303b (0000)
-=======
-import java.util.Set;
->>>>>>> origin/b2
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
+
 @Entity
-@Table(name="\"order\"")
+@Table(name = "\"order\"")
 @Data
 @Builder
 @NoArgsConstructor
@@ -49,16 +50,4 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-    public void setProducts(Set<Product> keySet) {
-    }
->>>>>>> 9b8303b (0000)
-=======
-
-    public void setProducts(Set<Product> keySet) {
-    }
->>>>>>> origin/b2
 }

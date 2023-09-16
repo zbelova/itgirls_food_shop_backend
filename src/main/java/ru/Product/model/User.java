@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 import java.util.UUID;
 
-// TODO добавить связь с таблицей заказов, так же пользователь будет связан с корзиной
-
-
 @Entity
 @Table(name="\"user\"")
 @Data

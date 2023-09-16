@@ -3,6 +3,7 @@ package ru.Product.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.Product.dto.*;
+
 import ru.Product.model.Category;
 import ru.Product.model.Order;
 import ru.Product.model.Product;
@@ -13,6 +14,7 @@ import ru.Product.repository.ProductRepository;
 import ru.Product.model.*;
 import ru.Product.service.CartService;
 import ru.Product.service.OrderService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,6 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-
     private final CartService cartService;
 
 
@@ -95,6 +96,7 @@ public class OrderServiceImpl implements OrderService {
 
         return orderDtoList;
     }
+
     // Создать заказ на основе корзины пользователя
     public Order createOrder(User user) {
         Cart cart = user.getCart();
@@ -113,6 +115,7 @@ public class OrderServiceImpl implements OrderService {
 
         return order;
     }
+
     // TODO сейчас не находит в БД продукты по UUID просто как пример
     @Override
     public OrderSaveDto createOrder(OrderSaveDto orderSaveDto) {
@@ -162,10 +165,6 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
-
-
-
-
-    }
+}
 
 

@@ -38,5 +38,50 @@ public class CartServiceImpl implements ProductService {
     public Map<Product, Integer> getCartItems(CartService cart) {
         return cart.getCartItems(productService);
     }
+
+    // Добавить продукт в корзину
+    public void addProductToCart(String productId) {
+        cartItems.put(productId, cartItems.getOrDefault(productId, 0) + 1);
+    }
+
+    // Убрать продукт из корзины
+    public void removeProductFromCart(String productId) {
+        int itemCount = cartItems.getOrDefault(productId, 0);
+        if (itemCount > 0) {
+            cartItems.put(productId, itemCount - 1);
+        }
+    }
+
+    // Добавить продукт в корзину
+    public void addProductToCart(String productUUID) {
+        cartItems.put(productUUID, cartItems.getOrDefault(productUUID, 0) + 1);
+    }
+
+    // Убрать продукт из корзины
+    public void removeProductFromCart(String productUUID) {
+        int itemCount = cartItems.getOrDefault(productUUID, 0);
+        if (itemCount > 0) {
+            cartItems.put(productUUID, itemCount - 1);
+
+        }
+    }
+
+    // Очистить корзину
+    public void removeAllProductsFromCart() {
+        cartItems.clear();
+    }
+
+    // Получить список всех продуктов в корзине с общей ценой
+    public Map<String, Integer> getCart() {
+        return cartItems;
+    }
+
+    public Map<Product, Integer> getCartItems() {
+        return getCartItems();
+    }
+
+    public void add(Product product) {
+    }
+
 }
 
