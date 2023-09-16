@@ -1,22 +1,18 @@
 package ru.Product.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
-import lombok.*;
+import lombok.Data;
 
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 // TODO добавить связь с таблицей заказов, так же пользователь будет связан с корзиной
-
-
 @Entity
-@Table(name="\"user\"")
+@Table(name = "user")
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
     @Id
@@ -38,10 +34,5 @@ public class User {
 
     @Column(name = "password")
     private String password;
-
-    @OneToMany(mappedBy = "user")
-    private Set<Order> orders;
-
-
 
 }

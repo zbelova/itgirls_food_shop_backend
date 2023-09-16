@@ -3,16 +3,27 @@ package ru.Product.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.Product.dto.*;
+<<<<<<< HEAD
 import ru.Product.model.Category;
 import ru.Product.model.Order;
 import ru.Product.model.Product;
 import ru.Product.model.User;
 import ru.Product.repository.OrderRepository;
 import ru.Product.repository.ProductRepository;
+=======
+import ru.Product.model.*;
+import ru.Product.repository.OrderRepository;
+import ru.Product.repository.ProductRepository;
+import ru.Product.service.CartService;
+>>>>>>> 9b8303b (0000)
 import ru.Product.service.OrderService;
 
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
+=======
+import java.util.Map;
+>>>>>>> 9b8303b (0000)
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -140,5 +151,38 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
+<<<<<<< HEAD
 
 }
+=======
+        private final CartService cartService;
+
+
+        // Создать заказ на основе корзины пользователя
+        public Order createOrder(User user) {
+            Cart cart = user.getCart();
+            Map<Product, Integer> cartItems = cartService.getCartItems(cart);
+
+            // Создание заказа, рассчет стоимости и сохранение в репозитории
+            Order order = new Order();
+            // логикa для расчета общей стоимости заказа
+            // order.setTotalPrice(...);
+            order.setProducts(cartItems.keySet());
+            order.setUser(user);
+            orderRepository.save(order);
+
+            // Очистить корзину после создания заказа
+            cartService.removeAllProductsFromCart(cart);
+
+            return order;
+        }
+
+        // Получить список всех заказов пользователя
+        public List<Order> getOrders(User user) {
+            return orderRepository.findByUser(user);
+        }
+    }
+
+
+
+>>>>>>> 9b8303b (0000)

@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+<<<<<<< HEAD
+=======
+import java.util.Set;
+>>>>>>> 9b8303b (0000)
 import java.util.UUID;
 import java.util.List;
 @Entity
@@ -41,4 +45,10 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+<<<<<<< HEAD
+=======
+
+    public void setProducts(Set<Product> keySet) {
+    }
+>>>>>>> 9b8303b (0000)
 }
