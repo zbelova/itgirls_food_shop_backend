@@ -3,6 +3,7 @@ package ru.Product.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "signUp(User user) - регистрация. Сейчас используется простая регистрация через почтовый ящик, подтверждения адреса почты нет")
+    @Operation(summary = "Регистрация через почтовый ящик, подтверждения адреса почты нет")
     @PostMapping("/signUp")
-    UserDto signUp(@RequestBody UserDto userCreateDto) {
+    UserDto signUp(@RequestBody @Valid UserDto userCreateDto) {
         return userService.createUser(userCreateDto);
     }
 
@@ -33,19 +34,19 @@ public class UserController {
         return null;
     }
 
-    @Operation(summary = "   updateUser(User user) - редактировать данные пользователя. Почтовый ящик сейчас поменять нельзя, потому что подтвердить изменение нельзя через почту. Пароль тоже нельзя. Но можем сделать просто смену почтового адреса и пароля в форме")
+    @Operation(summary = "Редактируем данные пользователя (почтовый ящик и пароль поменять нельзя)")
     @PutMapping("/updateUser")
-    UserDto updateUser(@RequestBody UserUpdateDto userCreateDto) {
+    UserDto updateUser(@RequestBody @Valid UserUpdateDto userCreateDto) {
         return userService.updateUser(userCreateDto);
     }
 
-    @Operation(summary = "logout() - разлогиниться")
+    @Operation(summary = "Выйти из аккаунта пользователя")
     @GetMapping("/logout")
     String getAuthorsView(Model model) {
         return "redirect: /";
     }
 
-    @Operation(summary = "getUser() - получить данные текущего авторизованного пользователя")
+    @Operation(summary = "Получить данные текущего авторизованного пользователя по его id")
     @GetMapping("/getUser")
     UserDto getUser(@RequestParam("id") UUID id) {
         return userService.findById(id);
