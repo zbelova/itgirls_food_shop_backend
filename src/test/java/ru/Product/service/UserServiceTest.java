@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.Product.dto.UserDto;
+import ru.Product.dto.UserUpdateDto;
 import ru.Product.model.Order;
 import ru.Product.model.User;
 import ru.Product.repository.UserRepository;
@@ -32,7 +34,7 @@ public class UserServiceTest {
     UserServiceImpl userService;
 
     @Test
-    public void testFindById () {
+    public void testFindById() {
         UUID id =  UUID.randomUUID();
         String name = "Daria";
         String email = "daria@gmail.com";
@@ -54,4 +56,65 @@ public class UserServiceTest {
         Assertions.assertEquals(userDto.getAddress(),user.getAddress());
         Assertions.assertEquals(userDto.getPassword(),user.getPassword());
     }
+
+    @Test
+    public void testCreateUser() {
+        UUID id =  UUID.randomUUID();
+        String name = "Daria";
+        String email = "daria@yandex.ru";
+        String phone = "8999666554";
+        String address = "Smolensk";
+        String password = "PASSword8!";
+        Set<Order> orders = new HashSet<>();
+
+        User user = new User (id, name, email, phone, address, password, orders);
+
+        when(userRepository.save(user)).thenReturn(user);
+
+        UserDto userDto = userService.createUser(new UserDto(id, name, email, phone, address,password));
+
+        verify(userRepository).save(user);
+        Assertions.assertEquals(userDto.getId(),user.getId());
+        Assertions.assertEquals(userDto.getName(),user.getName());
+        Assertions.assertEquals(userDto.getEmail(),user.getEmail());
+        Assertions.assertEquals(userDto.getPhone(),user.getPhone());
+        Assertions.assertEquals(userDto.getAddress(),user.getAddress());
+        Assertions.assertEquals(userDto.getPassword(),user.getPassword());
+    }
+
+    /*
+    *     public UserDto updateUser(UserUpdateDto userUpdateDto) {
+        log.info("Try to update user");
+        User user = userRepository.findUserByName(userUpdateDto.getName()).orElseThrow();
+        user.setName(userUpdateDto.getName());
+        user.setPhone(userUpdateDto.getPhone());
+        user.setAddress(userUpdateDto.getAddress());
+        User savedUser = userRepository.save(user);
+        UserDto userDto = convertEntityToDto(savedUser);
+        log.info("User: {}", userDto.toString());
+        return userDto;
+    }*/
+    @Test
+    public void testUpdateUser() {
+        UUID id =  UUID.randomUUID();
+        String name = "Daria";
+        String email = "daria@yandex.ru";
+        String phone = "8999666554";
+        String address = "Smolensk";
+        String password = "PASSword8!";
+        Set<Order> orders = new HashSet<>();
+
+        User user = new User (id, name, email, phone, address, password, orders);
+
+        when(userRepository.findUserByName(name)).thenReturn(Optional.of(user));
+
+        UserDto userDto = userService.updateUser(new UserUpdateDto(id, name, phone, address));
+
+        verify(userRepository).findUserByName(name);
+        Assertions.assertEquals(userDto.getId(),user.getId());
+        Assertions.assertEquals(userDto.getName(),user.getName());
+        Assertions.assertEquals(userDto.getPhone(),user.getPhone());
+        Assertions.assertEquals(userDto.getAddress(),user.getAddress());
+    }
+
 }
