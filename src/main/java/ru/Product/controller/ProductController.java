@@ -9,21 +9,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.Product.dto.ProductDto;
+import ru.Product.service.ProductService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/product")
 @SecurityRequirement(name = "Продукты")
 @RequiredArgsConstructor
 public class ProductController {
+    private ProductService productService;
 
     @GetMapping("/getAllProduct")
     @Operation(summary = "Получить список всех продуктов по категории")
     public List<ProductDto> getAllProduct(
             @Parameter(description = "id категории", required = true) @RequestParam String id
     ) {
-        return null;
+        return productService.getAll();
     }
 
     @GetMapping("/getOneProduct")
@@ -31,7 +34,7 @@ public class ProductController {
     public ProductDto getOneProduct(
             @Parameter(description = "id продукта", required = true) @RequestParam String id
     ) {
-        return null;
+        return productService.getOne(UUID.fromString(id));
     }
 
 }
