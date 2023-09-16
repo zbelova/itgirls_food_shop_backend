@@ -1,6 +1,7 @@
 package ru.Product.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.Product.dto.ProductAndPriceDto;
@@ -14,6 +15,7 @@ import java.util.*;
 @Component
 @RequiredArgsConstructor
 @SessionScope
+@Slf4j
 public class CartServiceImpl implements CartService {
 
     private final ProductRepository productRepository;
@@ -23,12 +25,14 @@ public class CartServiceImpl implements CartService {
     public void removeProduct(UUID id) {
         Optional<Product> product = productRepository.findById(id);
         cart.remove(product);
+        log.info("Продукт с ID: {} удален", id);
     }
 
     @Override
     public void addProduct(UUID id) {
         Optional<Product> product = productRepository.findById(id);
         cart.add(product);
+        log.info("Продукт с ID: {} добавлен", id);
     }
 
     @Override

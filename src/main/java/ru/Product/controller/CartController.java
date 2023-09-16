@@ -3,6 +3,7 @@ package ru.Product.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,7 @@ public class CartController {
     @PostMapping("/addProductToCart")
     @Operation(summary = "Добавить продукт в корзину по id")
     public void addProductToCart(
-            @Parameter(description = "id продукта", required = true) @RequestParam String id
+            @Parameter(description = "id продукта", required = true) @RequestParam @Valid String id
     ) {
         cartService.addProduct(UUID.fromString(id));
     }
@@ -36,7 +37,7 @@ public class CartController {
     @PostMapping("/removeProductFromCart")
     @Operation(summary = "Убрать продукт из корзины по id")
     public void removeProductFromCart(
-            @Parameter(description = "id продукта", required = true) @RequestParam String id
+            @Parameter(description = "id продукта", required = true) @RequestParam @Valid String id
     ) {
         cartService.removeProduct(UUID.fromString(id));
     }
