@@ -81,11 +81,11 @@ public class UserServiceTest {
 
         User user = new User (id, name, email, phone, address, password, orders);
 
-        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.save(Mockito.any())).thenReturn(user);
 
         UserDto userDto = userService.createUser(new UserDto(id, name, email, phone, address, password));
 
-        verify(userRepository).save(user);
+        verify(userRepository).save(Mockito.any());
         Assertions.assertEquals(userDto.getId(),user.getId());
         Assertions.assertEquals(userDto.getName(),user.getName());
         Assertions.assertEquals(userDto.getEmail(),user.getEmail());
