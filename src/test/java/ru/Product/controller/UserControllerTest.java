@@ -12,10 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.Product.dto.UserDto;
+import ru.Product.dto.UserUpdateDto;
 import ru.Product.model.Order;
 import ru.Product.model.User;
 import ru.Product.repository.UserRepository;
@@ -116,6 +114,41 @@ public class UserControllerTest {
                         .param("password", password))
                 .andExpect(status().isOk());
     }
+
+    //    @Operation(summary = "Редактируем данные пользователя (почтовый ящик и пароль поменять нельзя)")
+    //    @PutMapping("/updateUser")
+    //    UserDto updateUser(@RequestBody @Valid UserUpdateDto userCreateDto) {
+    //        return userService.updateUser(userCreateDto);
+@Test
+public void testUpdateUser() throws Exception {
+
+    UUID id =  UUID.randomUUID();
+    String name = "Test";
+    String email = "test@mail.ru";
+    String phone = "9009009090";
+    String address = "Test str.";
+    String password = "123456";
+    Set<Order> orders = new HashSet<>();
+
+    User user =  new User (id, name, email, phone, address, password, orders);
+    UserUpdateDto userDto = new UserUpdateDto(id, name, phone, address);
+
+    when(userRepository.findUserByName(name)).thenReturn(Optional.of(user));
+    when(userRepository.save(Mockito.any())).thenReturn(user);
+
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/user/updateUser")
+                    .content(asJsonString(userDto))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(userDto.getId().toString()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(userDto.getName()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.phone").value(userDto.getPhone()))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.address").value(userDto.getAddress()));
+
+    verify(userRepository).findUserByName(name);
+    verify(userRepository).save(Mockito.any());
+}
 
     public static String asJsonString(Object obj) {
         try {

@@ -26,7 +26,7 @@ public class UserUpdateDto {
     private UUID id;
 
     @Schema(
-            requiredMode = NOT_REQUIRED,
+            requiredMode = REQUIRED,
             description = "user's name",
             name = "name",
             type = "string")
