@@ -1,6 +1,7 @@
 package ru.Product.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.Product.dto.*;
 import ru.Product.model.Category;
@@ -9,8 +10,8 @@ import ru.Product.model.Product;
 import ru.Product.model.User;
 import ru.Product.repository.OrderRepository;
 import ru.Product.repository.ProductRepository;
+import ru.Product.service.CartService;
 import ru.Product.service.OrderService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,18 +19,20 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
-
     @Override
     public List<OrderGetAllDto> getAllOrdersByUserId(UUID id) {
+        log.info("Попытка получить список заказов по user_id {}", id);
         List<Order> orders = orderRepository.findAllByUserId(id);
         List<OrderGetAllDto> orderDtoList = new ArrayList<>();
 
         for (Order order : orders) {
+            log.info("Статус заказа с id {}: {}", order.getId(), order.getStatus());
             OrderGetAllDto orderDto = new OrderGetAllDto();
             orderDto.setId(order.getId());
 
@@ -59,10 +62,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderGetAllDto> getAllOrders() {
+        log.info("Попытка получить список всех заказов");
         List<Order> allOrders = orderRepository.findAll();
         List<OrderGetAllDto> orderDtoList = new ArrayList<>();
 
         for (Order order : allOrders) {
+            log.info("Статус заказа с id {}: {}", order.getId(), order.getStatus());
             OrderGetAllDto orderDto = new OrderGetAllDto();
             orderDto.setId(order.getId());
 
@@ -95,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderSaveDto createOrder(OrderSaveDto orderSaveDto) {
         // Получаем список объектов Product по списку UUID из OrderSaveDto
+        log.info("Попытка получить список продуктов по id {}", orderSaveDto.getProduct());
         List<Product> productList = productRepository.findAllById(orderSaveDto.getProduct());
 
         // Создаем новый объект Order на основе OrderSaveDto
@@ -109,6 +115,7 @@ public class OrderServiceImpl implements OrderService {
 
         // Сохраняем заказ в репозитории базы данных
         Order savedOrder = orderRepository.save(order);
+        log.info("Заказ с id {} сохранен в базе данных", savedOrder.getId());
 
         // Создаем и возвращаем новый OrderSaveDto на основе сохраненного объекта Order
         return OrderSaveDto.builder()
@@ -140,5 +147,6 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
-
 }
+
+

@@ -14,11 +14,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     List<User> findByName(String name);
 
-//    @Query("UPDATE AppUser u SET u.lastLogin=:lastLogin WHERE u.username = ?#{ principal?.username }")
-//    @Modifying
-//    @Transactional
-//    void updateLastLogin(@Param("lastLogin") Date lastLogin);
-
     Optional<User> findUserByEmail(String email);
 
     Optional<User> findUserByName(String name);

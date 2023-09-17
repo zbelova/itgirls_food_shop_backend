@@ -2,14 +2,13 @@ package ru.Product.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-// TODO добавить связь с таблицей заказов, так же пользователь будет связан с корзиной
-
 
 @Entity
 @Table(name="\"user\"")
@@ -41,7 +40,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Order> orders;
-
 
 
 }
