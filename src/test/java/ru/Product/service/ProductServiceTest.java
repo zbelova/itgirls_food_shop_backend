@@ -1,7 +1,6 @@
 package ru.Product.service;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,17 +18,17 @@ import java.util.UUID;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ProductServiceTest {
     @Mock
-    private ProductRepository productRepository;
+    ProductRepository productRepository;
     @InjectMocks
-    private ProductServiceImpl productService;
-
-    public ProductServiceTest() {
-    }
+    ProductServiceImpl productService;
 
     @Test
     public void testGetOne() {
@@ -52,13 +51,11 @@ public class ProductServiceTest {
                 productPrice,
                 productQuantity,
                 category);
-        when(productRepository.findById(ArgumentMatchers.any(UUID.class))).thenReturn(Optional.of(product));
-        ProductServiceTest productServiceTest = new ProductServiceTest();
-        ProductDto result = productServiceTest.productService.getOne(UUID.randomUUID());
+        when(productRepository.findById(any(UUID.class))).thenReturn(Optional.of(product));
+
+        ProductDto result = productService.getOne(UUID.randomUUID()); // Используйте productService извне
         assertNotNull(result);
         assertEquals(category.getName(), result.getCategoryName());
-        verify(productRepository, times(1)).findById(ArgumentMatchers.any(UUID.class));
-
-
+        verify(productRepository, times(1)).findById(any(UUID.class));
     }
 }
