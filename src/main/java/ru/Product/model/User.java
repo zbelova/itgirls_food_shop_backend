@@ -25,16 +25,17 @@ public class User {
     @Column(name = "name")
     private String name;
 
+  //  @Pattern(regexp = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}",message = "Invalid email address")
     @Column(name = "email")
     private String email;
 
     @Column(name = "phone")
-    @Pattern(regexp = "\\d{10}", message = "Номер телефона должен содержать 10 цифр") // один из вариантов валидации в БД
+    @Pattern(regexp = "\\d{10}", message = "Номер телефона должен содержать 10 цифр")
     private String phone;
 
     @Column(name = "address")
     private String address;
-
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",message = "Password is not secure")
     @Column(name = "password")
     private String password;
 
