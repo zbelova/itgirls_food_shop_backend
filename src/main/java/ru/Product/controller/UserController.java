@@ -42,7 +42,7 @@ public class UserController {
 
     @Operation(summary = "Выйти из аккаунта пользователя")
     @GetMapping("/logout")
-    String getAuthorsView(Model model) {
+    String logout(Model model) {
         return "redirect: /";
     }
 

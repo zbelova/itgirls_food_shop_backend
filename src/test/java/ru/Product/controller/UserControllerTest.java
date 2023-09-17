@@ -98,16 +98,8 @@ public class UserControllerTest {
 
     @Test
     public void testLogin() throws Exception {
-
-        UUID id =  UUID.randomUUID();
-        String name = "Test";
         String email = "test@mail.ru";
-        String phone = "9009009090";
-        String address = "Test str.";
         String password = "123456";
-        Set<Order> orders = new HashSet<>();
-
-        User user =  new User (id, name, email, phone, address, password, orders);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/login")
                         .param("email", email)
@@ -115,12 +107,8 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
-    //    @Operation(summary = "Редактируем данные пользователя (почтовый ящик и пароль поменять нельзя)")
-    //    @PutMapping("/updateUser")
-    //    UserDto updateUser(@RequestBody @Valid UserUpdateDto userCreateDto) {
-    //        return userService.updateUser(userCreateDto);
-@Test
-public void testUpdateUser() throws Exception {
+    @Test
+    public void testUpdateUser() throws Exception {
 
     UUID id =  UUID.randomUUID();
     String name = "Test";
@@ -149,6 +137,13 @@ public void testUpdateUser() throws Exception {
     verify(userRepository).findUserByName(name);
     verify(userRepository).save(Mockito.any());
 }
+
+
+    @Test
+    public void testLogout() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/logout"))
+                .andExpect(status().isOk());
+    }
 
     public static String asJsonString(Object obj) {
         try {
