@@ -67,9 +67,6 @@ public class UserControllerTest {
         verify(userRepository).findById(id);
     }
 
-    //UserDto getUser(@RequestParam("id") UUID id) {return userService.findById(id);}
-    //UserDto signUp(@RequestBody @Valid UserDto userCreateDto) { return userService.createUser(userCreateDto);}
-
     @Test
     public void testSignUp() throws Exception {
 
@@ -81,7 +78,7 @@ public class UserControllerTest {
         String password = "123456";
         Set<Order> orders = new HashSet<>();
 
-        User user =  new User (id, name, email, phone, address, password, orders);;
+        User user =  new User (id, name, email, phone, address, password, orders);
         UserDto userDto = new UserDto (id, name, email, phone, address, password);
 
         when(userRepository.save(Mockito.any())).thenReturn(user);
@@ -100,6 +97,26 @@ public class UserControllerTest {
 
         verify(userRepository).save(Mockito.any());
     }
+
+    @Test
+    public void testLogin() throws Exception {
+
+        UUID id =  UUID.randomUUID();
+        String name = "Test";
+        String email = "test@mail.ru";
+        String phone = "9009009090";
+        String address = "Test str.";
+        String password = "123456";
+        Set<Order> orders = new HashSet<>();
+
+        User user =  new User (id, name, email, phone, address, password, orders);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user/login")
+                        .param("email", email)
+                        .param("password", password))
+                .andExpect(status().isOk());
+    }
+
     public static String asJsonString(Object obj) {
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -108,7 +125,5 @@ public class UserControllerTest {
             throw new RuntimeException(e);
         }
     }
-
-
 
 }
