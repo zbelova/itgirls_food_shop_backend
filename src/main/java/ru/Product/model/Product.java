@@ -33,7 +33,7 @@ public class Product {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 }

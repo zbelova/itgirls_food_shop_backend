@@ -1,27 +1,47 @@
 package ru.Product.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
+import ru.Product.dto.ProductCreateDto;
 import ru.Product.dto.ProductDto;
+import ru.Product.dto.ProductUpdateDto;
+import ru.Product.model.Category;
 import ru.Product.model.Product;
+import ru.Product.repository.CategoryRepository;
 import ru.Product.repository.ProductRepository;
+import ru.Product.service.ProductService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ru.Product.service.ProductService {
+public class ProductServiceImpl implements ProductService {
+
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public List<ProductDto> getAll() {
         List<Product> productList = productRepository.findAll();
+
         return productList.stream()
-                .map(this::convertToProductDto)
-                .toList();
+                .map(product -> ProductDto.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .description(product.getDescription())
+                        .image(product.getImage())
+                        .price(product.getPrice())
+                        .quantity(product.getQuantity())
+                        .categoryName(
+                                product.getCategory().getName()
+                        )
+                        .build()
+                ).toList();
     }
 
     @Override
@@ -29,13 +49,87 @@ public class ProductServiceImpl implements ru.Product.service.ProductService {
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
             Product foundProduct = product.get();
-            return convertToProductDto(foundProduct);
+            Category category = foundProduct.getCategory();
+            return convertToProductDto(foundProduct, category);
         } else {
+            log.error("Ошибка на методе получения продукта");
             throw new NotFoundException("Продукта с таким id нет: " + id);
         }
 
     }
-    private ProductDto convertToProductDto(Product product) {
+
+    @Override
+    public List<ProductDto> getAllFromOneCategory(UUID id) {
+        Optional<Category> category =  categoryRepository.findById(id);
+        if (category.isPresent()) {
+            Category foundCategory = category.get();
+            List<Product> productList = productRepository.findAllByCategoryId(id);
+            List<ProductDto> productDtoList = new ArrayList<>();
+            for (Product product : productList) {
+                ProductDto productDto = new ProductDto();
+                productDto.setId(product.getId());
+                productDto.setName(product.getName());
+                productDto.setDescription(product.getDescription());
+                productDto.setImage(product.getImage());
+                productDto.setPrice(product.getPrice());
+                productDto.setQuantity(product.getQuantity());
+                productDto.setCategoryName(product.getCategory().getName());
+                productDtoList.add(productDto);
+            }
+            return productDtoList;
+
+        } else {
+            log.error("Ошибка на методе получения продуктов из одной категории");
+            throw new NotFoundException("Категории продуктов с таким id нет: " + id);
+        }
+    }
+
+    @Override
+    public ProductDto createProduct(ProductCreateDto productCreateDto) {
+        Product newProduct = convertToProductEntity(productCreateDto);
+        Product savedProduct = productRepository.save(newProduct);
+        Category category = savedProduct.getCategory();
+        return convertToProductDto(savedProduct, category);
+    }
+
+    @Override
+    public ProductDto updateProduct(UUID id, ProductUpdateDto productUpdateDto) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            Product existingProduct = optionalProduct.get();
+            existingProduct.setName(productUpdateDto.getName());
+            existingProduct.setCategory(categoryRepository.findByName(productUpdateDto.getCategoryName()));
+            existingProduct.setDescription(productUpdateDto.getDescription());
+            existingProduct.setPrice(productUpdateDto.getPrice());
+            existingProduct.setQuantity(productUpdateDto.getQuantity());
+            existingProduct.setImage(productUpdateDto.getImage());
+            Product updatedProduct = productRepository.save(existingProduct);
+            Category category = existingProduct.getCategory();
+            return convertToProductDto(updatedProduct, category);
+        } else {
+            throw new NotFoundException("Product not found with id: " +  id);
+        }
+    }
+
+    @Override
+    public void deleteProduct(UUID id) {
+        productRepository.deleteById(id);
+    }
+
+    private Product convertToProductEntity(ProductCreateDto productCreateDto) {
+        return Product.builder()
+                .id(UUID.randomUUID())
+                .name(productCreateDto.getName())
+                .category(categoryRepository.findByName(productCreateDto.getCategoryName()))
+                .description(productCreateDto.getDescription())
+                .price(productCreateDto.getPrice())
+                .quantity(productCreateDto.getQuantity())
+                .image(productCreateDto.getImage())
+                .build();
+    }
+
+    private ProductDto convertToProductDto(Product product, Category category) {
+
         return ProductDto.builder()
                 .id(product.getId())
                 .name(product.getName())
@@ -43,7 +137,7 @@ public class ProductServiceImpl implements ru.Product.service.ProductService {
                 .image(product.getImage())
                 .price(product.getPrice())
                 .quantity(product.getQuantity())
-//                .category(product.getCategory())
+                .categoryName(category.getName())
                 .build();
     }
 }

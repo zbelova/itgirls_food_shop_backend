@@ -6,6 +6,7 @@ import org.webjars.NotFoundException;
 import ru.Product.dto.CategoryCreateDto;
 import ru.Product.dto.CategoryDto;
 import ru.Product.dto.CategoryUpdateDto;
+import ru.Product.dto.ProductDto;
 import ru.Product.model.Category;
 import ru.Product.repository.CategoryRepository;
 import ru.Product.service.CategoryService;

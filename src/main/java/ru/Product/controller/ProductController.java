@@ -19,13 +19,11 @@ import java.util.UUID;
 @SecurityRequirement(name = "Продукты")
 @RequiredArgsConstructor
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
 
-    @GetMapping("/getAllProduct")
-    @Operation(summary = "Получить список всех продуктов по категории")
-    public List<ProductDto> getAllProduct(
-            @Parameter(description = "id категории", required = true) @RequestParam String id
-    ) {
+    @GetMapping("/getAllProducts")
+    @Operation(summary = "Получить список всех продуктов")
+    public List<ProductDto> getAllProducts() {
         return productService.getAll();
     }
 
@@ -35,6 +33,14 @@ public class ProductController {
             @Parameter(description = "id продукта", required = true) @RequestParam String id
     ) {
         return productService.getOne(UUID.fromString(id));
+    }
+
+    @GetMapping("/getAllProductsFromOneCategory")
+    @Operation(summary = "Получить все продукты из одной категории")
+    public List<ProductDto> getAllProductsFromOneCategory(
+            @Parameter(description = "id категории", required = true) @RequestParam String id
+    ) {
+        return productService.getAllFromOneCategory(UUID.fromString(id));
     }
 
 }

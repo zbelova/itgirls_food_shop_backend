@@ -1,13 +1,11 @@
 package ru.Product.model;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 @Entity
 @Table(name="category")
@@ -26,4 +24,6 @@ public class Category {
     @Column(name="image")
     private String image;
 
+    @OneToMany(mappedBy = "category")
+    private List<Product> productList;
 }

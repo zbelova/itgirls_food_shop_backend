@@ -128,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
                 .image(product.getImage())
                 .price(product.getPrice())
                 .quantity(product.getQuantity())
-                .category(convertToCategoryDto(product.getCategory()))
+//                .category(convertToCategoryDto(product.getCategory()))
                 .build();
     }
 
