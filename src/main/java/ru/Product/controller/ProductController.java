@@ -3,12 +3,13 @@ package ru.Product.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.Product.dto.ProductCreateDto;
 import ru.Product.dto.ProductDto;
+import ru.Product.dto.ProductUpdateDto;
 import ru.Product.service.ProductService;
 
 import java.util.List;
@@ -42,5 +43,27 @@ public class ProductController {
     ) {
         return productService.getAllFromOneCategory(UUID.fromString(id));
     }
+
+    @PostMapping("/create")
+    @Operation(summary = "Создание нового продукта")
+    public ProductDto createProduct(@RequestBody @Valid ProductCreateDto productCreateDto) {
+        return productService.createProduct(productCreateDto);
+    }
+
+    @PutMapping("/update")
+    @Operation(summary = "Обновление продукта")
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody @Valid ProductUpdateDto productUpdateDto) {
+        UUID productId = productUpdateDto.getId();
+        ProductDto updatedProduct = productService.updateProduct(productId, productUpdateDto);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "Удаление продукта")
+    public void deleteBook(@RequestBody ProductDto productDto) {
+        UUID productId = productDto.getId();
+        productService.deleteProduct(productId);
+    }
+
 
 }

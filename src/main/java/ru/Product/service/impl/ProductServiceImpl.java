@@ -27,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAll() {
+        log.info("Найти все продукты");
         List<Product> productList = productRepository.findAll();
 
         return productList.stream()
@@ -46,8 +47,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getOne(UUID id) {
+        log.info("Попытка найти автора по id {}", id);
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
+            log.info("Если продукт существует, то происходит получение продукта и его категории");
             Product foundProduct = product.get();
             Category category = foundProduct.getCategory();
             return convertToProductDto(foundProduct, category);
@@ -60,8 +63,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllFromOneCategory(UUID id) {
+        log.info("Попытка найти все продукты из категории по id", id);
         Optional<Category> category =  categoryRepository.findById(id);
         if (category.isPresent()) {
+            log.info("Если категория существует, собирается список продуктов из этой категории");
             Category foundCategory = category.get();
             List<Product> productList = productRepository.findAllByCategoryId(id);
             List<ProductDto> productDtoList = new ArrayList<>();
@@ -86,6 +91,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto createProduct(ProductCreateDto productCreateDto) {
+        log.info("Создание продукта");
         Product newProduct = convertToProductEntity(productCreateDto);
         Product savedProduct = productRepository.save(newProduct);
         Category category = savedProduct.getCategory();
@@ -94,8 +100,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto updateProduct(UUID id, ProductUpdateDto productUpdateDto) {
+        log.info("Обновление информации по продукту по id");
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
+            log.info("Если продукт существует, то изменить информацию о нем");
             Product existingProduct = optionalProduct.get();
             existingProduct.setName(productUpdateDto.getName());
             existingProduct.setCategory(categoryRepository.findByName(productUpdateDto.getCategoryName()));
@@ -107,12 +115,14 @@ public class ProductServiceImpl implements ProductService {
             Category category = existingProduct.getCategory();
             return convertToProductDto(updatedProduct, category);
         } else {
+            log.error("Ошибка на методе поиска продукта по id");
             throw new NotFoundException("Product not found with id: " +  id);
         }
     }
 
     @Override
     public void deleteProduct(UUID id) {
+        log.info("Удаление продукта по id");
         productRepository.deleteById(id);
     }
 

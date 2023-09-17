@@ -1,5 +1,6 @@
 package ru.Product.model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,18 +19,22 @@ public class Product {
     @Column(name = "id")
     private UUID id;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
+    @NotNull
     @Column(name = "description")
     private String description;
 
     @Column(name = "image")
     private String image;
 
+    @NotNull
     @Column(name = "price")
     private BigDecimal price;
 
+    @NotNull
     @Column(name = "quantity")
     private Integer quantity;
 
