@@ -7,7 +7,7 @@
 
     <changeSet id="alter-table-product_order" author="Bloody-Mary">
         <sql>
-            ALTER TABLE IF EXISTS "product_order" ADD COLUMN IF NOT EXISTS product_name VARCHAR;
+            ALTER TABLE IF EXISTS "product_order" ADD COLUMN IF NOT EXISTS product_name VARCHAR NOT NULL;
             ALTER TABLE IF EXISTS "product_order" ADD COLUMN IF NOT EXISTS price INTEGER NOT NULL;
             ALTER TABLE IF EXISTS "product_order" DROP CONSTRAINT IF EXISTS product_order_product_id_fkey;
         </sql>
