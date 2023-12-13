@@ -79,8 +79,7 @@
             quantity integer NOT NULL,
             product_name varchar NOT NULL,
             price decimal NOT NULL,
-            FOREIGN KEY (order_id) REFERENCES "order" (id),
-            FOREIGN KEY (product_id) REFERENCES product (id)
+            FOREIGN KEY (order_id) REFERENCES "order" (id)
             );
 
         </sql>
