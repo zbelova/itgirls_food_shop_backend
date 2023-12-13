@@ -77,6 +77,7 @@
             order_id uuid NOT NULL,
             product_id uuid NOT NULL,
             quantity integer NOT NULL,
+            product_name varchar NOT NULL,
             FOREIGN KEY (order_id) REFERENCES "order" (id),
             FOREIGN KEY (product_id) REFERENCES product (id)
             );
