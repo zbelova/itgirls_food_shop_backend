@@ -13,6 +13,7 @@ import ru.Product.repository.CategoryRepository;
 import ru.Product.service.CategoryService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -64,6 +65,17 @@ public class CategoryServiceImpl implements CategoryService {
         } else {
             throw new NotFoundException("Category not found with id: " + id);
         }
+    }
+
+    @Override
+    public void deleteCategoryById(UUID id) {
+        log.info("Удаление категории: {}", id);
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isPresent()) {
+            throw new IllegalStateException("Категория с id: " + id + " содержит продукты и не может быть удалена");
+        }
+        categoryRepository.deleteById(id);
+        log.info("Категория с ID: {} удалена", id);
     }
 
     private CategoryDto convertToCategoryDto(Category category) {
