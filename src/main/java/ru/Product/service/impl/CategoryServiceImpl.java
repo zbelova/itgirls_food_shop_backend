@@ -48,6 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto createCategory(CategoryCreateDto categoryCreateDto) {
+        log.info("Создание категории: {}", categoryCreateDto);
         Category newCategory = convertToCategoryEntity(categoryCreateDto);
         Category savedCategory = categoryRepository.save(newCategory);
         return convertToCategoryDto(savedCategory);
