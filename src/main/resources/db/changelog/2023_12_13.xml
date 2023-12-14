@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="alter-table-product_order" author="Bloody-Mary">
+        <sql>
+            ALTER TABLE IF EXISTS "product_order" ADD COLUMN IF NOT EXISTS product_name VARCHAR NOT NULL;
+            ALTER TABLE IF EXISTS "product_order" ADD COLUMN IF NOT EXISTS price INTEGER NOT NULL;
+            ALTER TABLE IF EXISTS "product_order" DROP CONSTRAINT IF EXISTS product_order_product_id_fkey;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
