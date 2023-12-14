@@ -34,6 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getOne(UUID id) {
+        log.info("Попытка найти категорию по id {}", id);
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
             Category foundCategory = category.get();
