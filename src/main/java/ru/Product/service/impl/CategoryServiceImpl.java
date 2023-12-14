@@ -78,7 +78,7 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("Удаление категории: {}", id);
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
-            throw new IllegalStateException("Категория с id: " + id + " содержит продукты и не может быть удалена");
+            throw new IllegalStateException("Category with id: " + id + " contains products and cannot be deleted");
         }
         categoryRepository.deleteById(id);
         log.info("Категория с ID: {} удалена", id);
