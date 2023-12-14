@@ -24,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAll() {
+        log.info("Найти все категории");
         List<Category> categoryList = categoryRepository.findAll();
 
         return categoryList.stream()
