@@ -9,8 +9,7 @@
         <sql>
             CREATE TABLE IF NOT EXISTS cart (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-            user_id UUID UNIQUE,
-            total_price DECIMAL(19, 2),
+            user_id UUID UNIQUE NOT NULL,
             FOREIGN KEY (user_id) REFERENCES "user"(id)
             );
 
@@ -21,9 +20,9 @@
         <sql>
             CREATE TABLE IF NOT EXISTS cart_item (
             id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-            cart_id UUID,
-            product_id UUID,
-            quantity INT,
+            cart_id UUID NOT NULL,
+            product_id UUID NOT NULL,
+            quantity INT NOT NULL,
             FOREIGN KEY (cart_id) REFERENCES cart(id),
             FOREIGN KEY (product_id) REFERENCES product(id)
             );
