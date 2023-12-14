@@ -52,5 +52,10 @@ public class CategoryController {
         return ResponseEntity.ok(updatedCategory);
     }
 
-
+    @DeleteMapping("/delete")
+    @Operation(summary = "Удаление категории")
+    public void deleteCategoryById(@RequestBody CategoryDto categoryDto) {
+        UUID categoryId = categoryDto.getId();
+        categoryService.deleteCategoryById(categoryId);
+    }
 }
