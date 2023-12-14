@@ -37,9 +37,11 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("Попытка найти категорию по id {}", id);
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
+            log.info("Если категория существует, то происходит получение информации о ней");
             Category foundCategory = category.get();
             return convertToCategoryDto(foundCategory);
         } else {
+            log.error("Ошибка получения информации о категории по id");
             throw new NotFoundException("Category not found with id: " + id);
         }
     }
