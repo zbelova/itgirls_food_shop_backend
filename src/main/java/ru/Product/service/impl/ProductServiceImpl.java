@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getOne(UUID id) {
-        log.info("Попытка найти автора по id {}", id);
+        log.info("Попытка найти продукт по id {}", id);
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
             log.info("Если продукт существует, то происходит получение продукта и его категории");
