@@ -127,7 +127,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(UUID id) {
-        log.info("Удаление продукта по id");
+        log.info("Удаление продукта с id: {}", id);
         productRepository.deleteById(id);
     }
 
