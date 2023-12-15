@@ -72,17 +72,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategoryById(UUID id) {
-        log.info("Удаление категории: {}", id);
+    public void deleteCategory(UUID id) {
+        log.info("Удаление категории с id: {}", id);
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             Category category = optionalCategory.get();
             if (category.getProductList().isEmpty()) {
                 categoryRepository.deleteById(id);
-                log.info("Категория с ID: {} удалена", id);
+                log.info("Категория удалена с id: {}", id);
             } else {
-                log.error("Ошибка удаления категории");
-                throw new IllegalStateException("Category with id: " + id + " contains products and cannot be deleted");
+                log.error("Ошибка удаления категории с id: {}", id);
+                throw new IllegalStateException("Категория с id " + id + " содержит продукты и не может быть удалена");
             }
         }
     }
