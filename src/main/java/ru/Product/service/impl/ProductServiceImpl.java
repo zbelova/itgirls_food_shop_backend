@@ -66,29 +66,29 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllFromOneCategory(UUID id) {
-        log.info("Попытка найти все продукты из категории по id", id);
-        Optional<Category> category =  categoryRepository.findById(id);
+        log.info("Поиск всех продуктов в категории с id: {}", id);
+        Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
-            log.info("Если категория существует, собирается список продуктов из этой категории");
             Category foundCategory = category.get();
-            List<Product> productList = productRepository.findAllByCategoryId(id);
-            List<ProductDto> productDtoList = new ArrayList<>();
-            for (Product product : productList) {
-                ProductDto productDto = new ProductDto();
-                productDto.setId(product.getId());
-                productDto.setName(product.getName());
-                productDto.setDescription(product.getDescription());
-                productDto.setImage(product.getImage());
-                productDto.setPrice(product.getPrice());
-                productDto.setQuantity(product.getQuantity());
-                productDto.setCategoryName(product.getCategory().getName());
-                productDtoList.add(productDto);
-            }
-            return productDtoList;
-
+            log.info("Найдена категория: {}", foundCategory);
+            List<Product> products = productRepository.findAllByCategoryId(id);
+            return products.stream()
+                    .map(product -> {
+                        log.info("Преобразование продукта в DTO");
+                        return ProductDto.builder()
+                                .id(product.getId())
+                                .name(product.getName())
+                                .description(product.getDescription())
+                                .image(product.getImage())
+                                .price(product.getPrice())
+                                .quantity(product.getQuantity())
+                                .categoryName(foundCategory.getName())
+                                .build();
+                    })
+                    .toList();
         } else {
-            log.error("Ошибка на методе получения продуктов из одной категории");
-            throw new NotFoundException("Категории продуктов с таким id нет: " + id);
+            log.error("Категория продуктов не найдена с id: {}", id);
+            throw new NotFoundException("Категория продуктов не найдена с id: " + id);
         }
     }
 
