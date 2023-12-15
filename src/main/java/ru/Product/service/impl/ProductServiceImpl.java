@@ -94,10 +94,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto createProduct(ProductCreateDto productCreateDto) {
-        log.info("Создание продукта");
+        log.info("Создание нового продукта: {}", productCreateDto);
         Product newProduct = convertToProductEntity(productCreateDto);
         Product savedProduct = productRepository.save(newProduct);
         Category category = savedProduct.getCategory();
+        log.info("Продукт создан: {}", savedProduct);
         return convertToProductDto(savedProduct, category);
     }
 
