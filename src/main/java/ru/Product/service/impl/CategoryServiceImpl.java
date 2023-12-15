@@ -24,9 +24,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAll() {
-        log.info("Найти все категории");
+        log.info("Поиск всех категорий");
         List<Category> categoryList = categoryRepository.findAll();
-
         return categoryList.stream()
                 .map(this::convertToCategoryDto)
                 .toList();
@@ -34,57 +33,56 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getOne(UUID id) {
-        log.info("Попытка найти категорию по id {}", id);
+        log.info("Поиск категории с id: {}", id);
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
-            log.info("Если категория существует, то происходит получение информации о ней");
             Category foundCategory = category.get();
+            log.info("Найдена категория: {}", foundCategory);
             return convertToCategoryDto(foundCategory);
         } else {
-            log.error("Ошибка получения информации о категории по id");
-            throw new NotFoundException("Category not found with id: " + id);
+            log.error("Категория не найдена с id: {}", id);
+            throw new NotFoundException("Категория не найдена с id: " + id);
         }
     }
 
     @Override
     public CategoryDto createCategory(CategoryCreateDto categoryCreateDto) {
-        log.info("Создание категории: {}", categoryCreateDto);
+        log.info("Создание новой категории: {}", categoryCreateDto);
         Category newCategory = convertToCategoryEntity(categoryCreateDto);
         Category savedCategory = categoryRepository.save(newCategory);
+        log.info("Категория создана: {}", savedCategory);
         return convertToCategoryDto(savedCategory);
     }
 
     @Override
     public CategoryDto updateCategory(UUID id, CategoryUpdateDto categoryUpdateDto) {
-        log.info("Обновление информации о категории по id: {}", id);
+        log.info("Обновление информации о категории с id: {}", id);
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
-            log.info("Если категория существует, то изменить информацию о ней");
             Category existingCategory = optionalCategory.get();
             existingCategory.setName(categoryUpdateDto.getName());
             existingCategory.setImage(categoryUpdateDto.getImage());
-
             Category updatedCategory = categoryRepository.save(existingCategory);
-
+            log.info("Категория обновлена: {}", updatedCategory);
             return convertToCategoryDto(updatedCategory);
         } else {
-            log.error("Ошибка обновления информации о категории по id");
+            log.error("Категория не найдена с id: {}", id);
             throw new NotFoundException("Category not found with id: " + id);
         }
     }
 
     @Override
-    public void deleteCategoryById(UUID id) {
-        log.info("Удаление категории: {}", id);
+    public void deleteCategory(UUID id) {
+        log.info("Удаление категории с id: {}", id);
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             Category category = optionalCategory.get();
             if (category.getProductList().isEmpty()) {
                 categoryRepository.deleteById(id);
-                log.info("Категория с ID: {} удалена", id);
+                log.info("Категория удалена с id: {}", id);
             } else {
-                log.error("Ошибка удаления категории");
-                throw new IllegalStateException("Category with id: " + id + " contains products and cannot be deleted");
+                log.error("Ошибка удаления категории с id: {}", id);
+                throw new IllegalStateException("Категория с id " + id + " содержит продукты и не может быть удалена");
             }
         }
     }
