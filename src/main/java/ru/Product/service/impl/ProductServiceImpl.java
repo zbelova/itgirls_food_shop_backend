@@ -104,11 +104,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto updateProduct(UUID id, ProductUpdateDto productUpdateDto) {
-        log.info("Обновление информации по продукту по id");
+        log.info("Обновление информации о продукте с id: {}", id);
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
-            log.info("Если продукт существует, то изменить информацию о нем");
             Product existingProduct = optionalProduct.get();
+            log.info("Найден существующий продукт: {}", existingProduct);
             existingProduct.setName(productUpdateDto.getName());
             existingProduct.setCategory(categoryRepository.findByName(productUpdateDto.getCategoryName()));
             existingProduct.setDescription(productUpdateDto.getDescription());
@@ -116,11 +116,12 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.setQuantity(productUpdateDto.getQuantity());
             existingProduct.setImage(productUpdateDto.getImage());
             Product updatedProduct = productRepository.save(existingProduct);
+            log.info("Продукт обновлён: {}", updatedProduct);
             Category category = existingProduct.getCategory();
             return convertToProductDto(updatedProduct, category);
         } else {
-            log.error("Ошибка на методе поиска продукта по id");
-            throw new NotFoundException("Product not found with id: " +  id);
+            log.error("Продукт не найден с id: {}", id);
+            throw new NotFoundException("Продукт не найден с id: " +  id);
         }
     }
 
