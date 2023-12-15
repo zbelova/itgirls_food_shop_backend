@@ -24,9 +24,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAll() {
-        log.info("Найти все категории");
+        log.info("Поиск всех категорий");
         List<Category> categoryList = categoryRepository.findAll();
-
         return categoryList.stream()
                 .map(this::convertToCategoryDto)
                 .toList();
