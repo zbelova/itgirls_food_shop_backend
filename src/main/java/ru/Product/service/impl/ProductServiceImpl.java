@@ -28,22 +28,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAll() {
-        log.info("Найти все продукты");
-        List<Product> productList = productRepository.findAll();
+        log.info("Поиск всех продуктов");
+        List<Product> products = productRepository.findAll();
 
-        return productList.stream()
-                .map(product -> ProductDto.builder()
-                        .id(product.getId())
-                        .name(product.getName())
-                        .description(product.getDescription())
-                        .image(product.getImage())
-                        .price(product.getPrice())
-                        .quantity(product.getQuantity())
-                        .categoryName(
-                                product.getCategory().getName()
-                        )
-                        .build()
-                ).toList();
+        return products.stream()
+                .map(product -> {
+                    log.info("Преобразование продукта в DTO");
+                    return ProductDto.builder()
+                            .id(product.getId())
+                            .name(product.getName())
+                            .description(product.getDescription())
+                            .image(product.getImage())
+                            .price(product.getPrice())
+                            .quantity(product.getQuantity())
+                            .categoryName(product.getCategory().getName())
+                            .build();
+                })
+                .toList();
     }
 
     @Override
