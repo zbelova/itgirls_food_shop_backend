@@ -49,16 +49,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getOne(UUID id) {
-        log.info("Попытка найти продукт по id {}", id);
+        log.info("Поиск продукта с id: {}", id);
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
-            log.info("Если продукт существует, то происходит получение продукта и его категории");
             Product foundProduct = product.get();
+            log.info("Найден продукт: {}", foundProduct);
             Category category = foundProduct.getCategory();
+            log.info("Найдена категория: {}", category);
             return convertToProductDto(foundProduct, category);
         } else {
-            log.error("Ошибка на методе получения продукта");
-            throw new NotFoundException("Продукта с таким id нет: " + id);
+            log.error("Продукт не найден с id: {}", id);
+            throw new NotFoundException("Продукт не найден с id: " + id);
         }
 
     }
