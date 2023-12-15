@@ -33,15 +33,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getOne(UUID id) {
-        log.info("Попытка найти категорию по id {}", id);
+        log.info("Поиск категории с id: {}", id);
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
-            log.info("Если категория существует, то происходит получение информации о ней");
             Category foundCategory = category.get();
+            log.info("Найдена категория: {}", foundCategory);
             return convertToCategoryDto(foundCategory);
         } else {
-            log.error("Ошибка получения информации о категории по id");
-            throw new NotFoundException("Category not found with id: " + id);
+            log.error("Категория не найдена с id: {}", id);
+            throw new NotFoundException("Категория не найдена с id: " + id);
         }
     }
 
