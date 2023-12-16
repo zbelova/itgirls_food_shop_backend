@@ -32,4 +32,6 @@ public class OrderedProduct {
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
+
+    // test
 }
