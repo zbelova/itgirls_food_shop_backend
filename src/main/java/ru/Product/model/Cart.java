@@ -1,16 +1,15 @@
 package ru.Product.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "cart")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -72,7 +71,7 @@ public class Cart {
         cartItems.removeIf(item -> item.getProduct().getId() == id);
     }
 
-    private Integer calculateItemsCost() {
+    public Integer calculateItemsCost() {
         return cartItems.stream()
                 .mapToInt(CartItem::calculateCost)
                 .sum();

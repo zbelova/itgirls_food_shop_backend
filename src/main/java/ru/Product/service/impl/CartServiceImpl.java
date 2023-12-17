@@ -2,7 +2,6 @@ package ru.Product.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.Product.dto.*;
@@ -16,7 +15,6 @@ import ru.Product.service.CartService;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
 @RequiredArgsConstructor
 @SessionScope
 @Slf4j
@@ -44,12 +42,12 @@ public class CartServiceImpl implements CartService {
         return cartDto;
     }
 
-    public Cart getCartOrCreate(UserDto userDto) {
+    public Cart getCartOrCreate(UUID userId) {
         // не используется UserService, тк метод getUserByEmail возвращает UserDto,
         // у которого не дб id, а мне нужно дальше проверить существует ли Cart с соответствующим User.id.
         // Если получить сначата userDto, а потом конвертировать его через convertDtoToEntity(),
         // то метод convertDtoToEntity() присвоит рандомный новый User.id, тк он создает нового User на основе UserDto
-        User user = userRepository.findByEmail(userDto.getEmail());
+        User user = userRepository.findById(userId).orElseThrow();
         Optional <Cart> cartOptional = cartRepository.findById(user.getId());
         Cart cart;
         if(cartOptional.isEmpty()) {
@@ -61,25 +59,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDto addToCartDto(CartItemDto cartItemDto) {
-        Cart existingCart = cartRepository.findById(cartItemDto.getCartId()).orElseThrow();
-        User user = existingCart.getUser();
-        UserDto userDto = UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .password(user.getPassword())
-                .build();
-
-        Cart cart = getCartOrCreate(userDto);
+    public CartDto addToCartDto(UUID userId, UUID productId, Integer quantity) {
+        Cart cart = getCartOrCreate(userId);
         // не используется ProductService, тк он возвращает ProductDto
-        Product product = productRepository.findById(cartItemDto.getProductId()).orElseThrow();
+        Product product = productRepository.findById(productId).orElseThrow();
         // проверка количества Product в репозитории (хранилище)
-        int productCount = (int) productRepository.findById(cartItemDto.getProductId()).stream().count();
+        int productCount = (int) productRepository.findById(productId).stream().count();
         if (productCount > 0) {
-            cart.updateItem(product, cartItemDto.getQuantity());
+            cart.updateItem(product, quantity);
             return convertedEntityToDto(cartRepository.save(cart));
         } else {
             return convertedEntityToDto(cart);
@@ -87,25 +74,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart addToCart(CartItemDto cartItemDto) {
-        Cart existingCart = cartRepository.findById(cartItemDto.getCartId()).orElseThrow();
-        User user = existingCart.getUser();
-        UserDto userDto = UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .password(user.getPassword())
-                .build();
-
-        Cart cart = getCartOrCreate(userDto);
+    public Cart addToCart(UUID userId, UUID productId, Integer quantity) {
+        Cart cart = getCartOrCreate(userId);
         // не используется ProductService, тк он возвращает ProductDto
-        Product product = productRepository.findById(cartItemDto.getProductId()).orElseThrow();
+        Product product = productRepository.findById(productId).orElseThrow();
         // проверка количества Product в репозитории (хранилище)
-        int productCount = (int) productRepository.findById(cartItemDto.getProductId()).stream().count();
+        int productCount = (int) productRepository.findById(productId).stream().count();
         if (productCount > 0) {
-            cart.updateItem(product, cartItemDto.getQuantity());
+            cart.updateItem(product, quantity);
             return cartRepository.save(cart);
         } else {
             return cart;
@@ -113,15 +89,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDto clearCartDto(UserDto userDto) {
-        Cart cart = getCartOrCreate(userDto);
+    public CartDto clearCartDto(UUID userId) {
+        Cart cart = getCartOrCreate(userId);
         cart.clear();
         return convertedEntityToDto(cartRepository.save(cart));
     }
 
     @Override
-    public Cart clearCart(UserDto userDto) {
-        Cart cart = getCartOrCreate(userDto);
+    public Cart clearCart(UUID userId) {
+        Cart cart = getCartOrCreate(userId);
         cart.clear();
         return cartRepository.save(cart);
     }

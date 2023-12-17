@@ -15,4 +15,5 @@ public class CartDto {
 
     private UUID userId;
     private Set<CartItemDto> cartItems;
+    private Integer costCart;
 }
