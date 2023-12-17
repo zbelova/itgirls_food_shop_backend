@@ -136,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto createOrder(UUID user_id) {
-        log.info("Создание нового заказа пользователя: {}", user_id);
+        log.info("Создание нового заказа пользователя c id: {}", user_id);
         Order savedOrder = null;
         Optional<User> userOptional = userRepository.findById(user_id);
         if (userOptional.isEmpty()) {
