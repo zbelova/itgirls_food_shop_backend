@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
-import ru.Product.dto.OrderDto;
-import ru.Product.dto.OrderGetAllDto;
-import ru.Product.dto.OrderSaveDto;
+import ru.Product.dto.*;
 import ru.Product.dto.mapper.OrderDtoMapper;
 import ru.Product.model.*;
 import ru.Product.repository.OrderRepository;
 import ru.Product.repository.UserRepository;
 import ru.Product.service.OrderService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -219,6 +218,34 @@ public class OrderServiceImpl implements OrderService {
 //                .image(category.getImage())
 //                .build();
 //    }
+
+    private OrderGetAllDto convertOrderToProductDto(Order order) {
+        OrderGetAllDto orderDto = new OrderGetAllDto();
+        orderDto.setId(order.getId());
+
+        List<OrderedProductDto> productDtoList = order.getOrderedProducts().stream()
+                .map(orderedProduct -> OrderedProductDto
+                        .builder()
+                        .productId(orderedProduct.getProduct().getId())
+                        .productName(orderedProduct.getName())
+                        .productPrice(orderedProduct.getPrice())
+                        .productQuantity(orderedProduct.getQuantity())
+                        .build())
+                .collect(Collectors.toList());
+        orderDto.setOrderedProducts(productDtoList);
+        orderDto.setDateTime(order.getDateTime());
+        orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
+        orderDto.setStatus(order.getStatus());
+        orderDto.setUser(UserDto.builder()
+                .id(order.getUser().getId())
+                .name(order.getUser().getName())
+                .email(order.getUser().getEmail())
+                .phone(order.getUser().getPhone())
+                .address(order.getUser().getAddress())
+                .password(order.getUser().getPassword())
+                .build());
+        return orderDto;
+    }
 
 }
 
