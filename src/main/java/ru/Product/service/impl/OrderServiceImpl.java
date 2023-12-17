@@ -13,10 +13,7 @@ import ru.Product.service.OrderService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,38 +27,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderGetAllDto> getAllOrdersByUserId(UUID id) {
-//        log.info("Попытка получить список заказов по user_id {}", id);
-//        List<Order> orders = orderRepository.findAllByUserId(id);
-//        List<OrderGetAllDto> orderDtoList = new ArrayList<>();
-//
-//        for (Order order : orders) {
-//            log.info("Статус заказа с id {}: {}", order.getId(), order.getStatus());
-//            OrderGetAllDto orderDto = new OrderGetAllDto();
-//            orderDto.setId(order.getId());
-//
-//            // Преобразуем список продуктов Order в список ProductDto
-//            List<ProductDto> productDtoList = order.getProduct().stream()
-//                    .map(this::convertToProductDto)
-//                    .collect(Collectors.toList());
-//
-//            orderDto.setProduct(productDtoList);
-//            orderDto.setDateTime(order.getDateTime());
-//            orderDto.setTotalPrice(order.getTotalPrice());
-//            orderDto.setStatus(order.getStatus());
-//            orderDto.setUser(UserDto.builder()
-//                    .id(order.getUser().getId())
-//                    .name(order.getUser().getName())
-//                    .email(order.getUser().getEmail())
-//                    .phone(order.getUser().getPhone())
-//                    .address(order.getUser().getAddress())
-//                    .password(order.getUser().getPassword())
-//                    .build());
-//
-//            orderDtoList.add(orderDto);
-//        }
-//
-//        return orderDtoList;
-        return null;
+        log.info("Поиск всех заказов пользователя с id: {}", id);
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            log.error("Пользователь не найден с id: {}", id);
+            throw new NotFoundException("Пользователь с id " + id + " не найден");
+        }
+        List<Order> orders = orderRepository.findAllByUserId(id);
+        List<OrderGetAllDto> orderDtoList = new ArrayList<>();
+        for (Order order : orders) {
+            log.info("Статус заказа с id {}: {}", order.getId(), order.getStatus());
+            OrderGetAllDto orderDto = convertOrderToProductDto(order);
+            orderDtoList.add(orderDto);
+        }
+        return orderDtoList;
     }
 
     @Override
