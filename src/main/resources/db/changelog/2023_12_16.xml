@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="1" author="MadinaZarif">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM pg_extension WHERE extname='uuid-ossp';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="MadinaZarif">
+        <sql>
+
+            CREATE TABLE order_statuses (
+            status_id INT PRIMARY KEY,
+            status_name VARCHAR(255) NOT NULL,
+            description TEXT
+            );
+
+
+            INSERT INTO order_statuses (status_id, status_name, description) VALUES
+            (1, 'New', 'Новый заказ, ожидает обработки'),
+            (2, 'Processing', 'Заказ в процессе обработки'),
+            (3, 'Shipped', 'Заказ отправлен'),
+            (4, 'Delivered', 'Заказ доставлен'),
+            (5, 'Cancelled', 'Заказ отменен');
+
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
