@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class OrderGetAllDto {
     private UUID id;
-    private List<ProductDto> product;
+    private List<OrderedProductDto> orderedProducts;
     private LocalDate dateTime;
     private BigDecimal totalPrice;
     private String status;

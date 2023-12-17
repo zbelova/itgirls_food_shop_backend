@@ -20,9 +20,9 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("getOrders")
+    @GetMapping("getAllOrdersByUserId")
     @Operation(summary = "Получение всех заказов пользователя по id")
-    public List<OrderGetAllDto> getAllOrderByUserId(
+    public List<OrderGetAllDto> getAllOrdersByUserId(
             @Parameter(description = "id пользователя", required = true) @RequestParam(value = "id") String id
     ) {
         return orderService.getAllOrdersByUserId(UUID.fromString(id));
