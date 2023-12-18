@@ -11,9 +11,8 @@ import java.util.UUID;
 @Data
 @Builder
 public class CartItemDto {
-
     private UUID cartId;
     private UUID productId;
     private Integer quantity;
-    private Integer totalCost;
+    private Integer cost;
 }

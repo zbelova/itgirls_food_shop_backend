@@ -12,8 +12,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class CartDto {
-
     private UUID userId;
     private Set<CartItemDto> cartItems;
-    private Integer costCart;
+    private Integer TotalCot;
 }

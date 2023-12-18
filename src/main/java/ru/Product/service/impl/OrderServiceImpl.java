@@ -9,6 +9,7 @@ import ru.Product.dto.mapper.OrderDtoMapper;
 import ru.Product.model.*;
 import ru.Product.repository.OrderRepository;
 import ru.Product.repository.UserRepository;
+import ru.Product.service.CartService;
 import ru.Product.service.OrderService;
 
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final OrderDtoMapper orderDtoMapper;
+    private final CartService cartService;
 
     @Override
     public List<OrderGetAllDto> getAllOrdersByUserId(UUID id) {
@@ -134,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
                 } else {
                     Order order = createUserOrderFromCart(user, cart);
                     savedOrder = orderRepository.save(order);
-                    //TODO очистить корзину
+                    cartService.clearCart(user_id);
                     log.info("Заказ создан c id: {}", savedOrder.getId());
                 }
             }
@@ -171,7 +173,7 @@ public class OrderServiceImpl implements OrderService {
                 .dateTime(LocalDate.now())
                 .address(user.getAddress())
                 .status("Created")
-                .totalPrice(500000)                                  //TODO cart.getTotal();
+                .totalPrice(cart.calculateItemsCost())
                 .build();
         Set<OrderedProduct> orderedProducts = getOrderedProducts(cart, order);
         order.setOrderedProducts(orderedProducts);
