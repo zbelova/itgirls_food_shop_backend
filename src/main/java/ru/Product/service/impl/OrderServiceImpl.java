@@ -214,6 +214,23 @@ public class OrderServiceImpl implements OrderService {
                 .build());
         return orderDto;
     }
+
+    private OrderedProductDto convertToOrderedProductDto(OrderedProduct orderedProduct) {
+        return OrderedProductDto.builder()
+                .productQuantity(orderedProduct.getQuantity())
+                .build();
+    }
+
+    private UserDto convertToUserDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .address(user.getAddress())
+                .password(user.getPassword())
+                .build();
+    }
 }
 
 
