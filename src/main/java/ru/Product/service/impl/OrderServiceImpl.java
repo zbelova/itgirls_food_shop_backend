@@ -45,39 +45,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderGetAllDto> getAllOrders() {
-//        log.info("Попытка получить список всех заказов");
-//        List<Order> allOrders = orderRepository.findAll();
-//        List<OrderGetAllDto> orderDtoList = new ArrayList<>();
-//
-//        for (Order order : allOrders) {
-//            log.info("Статус заказа с id {}: {}", order.getId(), order.getStatus());
-//            OrderGetAllDto orderDto = new OrderGetAllDto();
-//            orderDto.setId(order.getId());
-//
-//            // Преобразуем список продуктов Order в список ProductDto
-//            List<ProductDto> productDtoList = order.getProduct().stream()
-//                    .map(this::convertToProductDto)
-//                    .collect(Collectors.toList());
-//
-//            orderDto.setProduct(productDtoList);
-//            orderDto.setDateTime(order.getDateTime());
-//            orderDto.setTotalPrice(order.getTotalPrice());
-//            orderDto.setStatus(order.getStatus());
-//            // Установка значения поля user
-//            orderDto.setUser(UserDto.builder()
-//                    .id(order.getUser().getId())
-//                    .name(order.getUser().getName())
-//                    .email(order.getUser().getEmail())
-//                    .phone(order.getUser().getPhone())
-//                    .address(order.getUser().getAddress())
-//                    .password(order.getUser().getPassword())
-//                    .build());
-//
-//            orderDtoList.add(orderDto);
-//        }
-//
-//        return orderDtoList;
-        return null;
+        log.info("Получить все заказы");
+        List<Order> allOrders = orderRepository.findAll();
+        List<OrderGetAllDto> orderDtoList = new ArrayList<>();
+
+        for (Order order : allOrders) {
+            log.info("Получение заказа с id: {}", order.getId());
+            OrderGetAllDto orderDto = convertToOrderGetAllDto(order);
+            orderDtoList.add(orderDto);
+        }
+        return orderDtoList;
     }
 
     // TODO сейчас не находит в БД продукты по UUID просто как пример
