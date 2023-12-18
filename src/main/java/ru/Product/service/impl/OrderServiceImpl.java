@@ -203,6 +203,16 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
+    private OrderGetAllDto convertToOrderGetAllDto(Order order) {
+        OrderGetAllDto orderDto = new OrderGetAllDto();
+        orderDto.setId(order.getId());
+        orderDto.setOrderedProducts(convertToOrderedProducts(order.getOrderedProducts()));
+        orderDto.setDateTime(order.getDateTime());
+        orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
+        orderDto.setStatus(order.getStatus());
+        orderDto.setUser(convertToUserDto(order.getUser()));
+        return orderDto;
+    }
 }
 
 
