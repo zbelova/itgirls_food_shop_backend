@@ -14,11 +14,14 @@ application.properties
 .springBeans
 .sts4-cache
 
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
+.ShopApplication.run.xml
+.env
 
 ### NetBeans ###
 /nbproject/private/
@@ -32,3 +35,4 @@ build/
 
 ### VS Code ###
 .vscode/
+
