@@ -30,7 +30,7 @@ public class OrderController {
 
     @GetMapping("/getAllOrders")
     @Operation(summary = "Получение всех заказов в БД")
-    public List<OrderGetAllDto> getAllOrder() {
+    public List<OrderGetAllDto> getAllOrders() {
         return orderService.getAllOrders();
     }
 

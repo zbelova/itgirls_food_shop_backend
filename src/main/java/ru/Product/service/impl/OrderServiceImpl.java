@@ -45,39 +45,28 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderGetAllDto> getAllOrders() {
-//        log.info("Попытка получить список всех заказов");
-//        List<Order> allOrders = orderRepository.findAll();
-//        List<OrderGetAllDto> orderDtoList = new ArrayList<>();
-//
-//        for (Order order : allOrders) {
-//            log.info("Статус заказа с id {}: {}", order.getId(), order.getStatus());
-//            OrderGetAllDto orderDto = new OrderGetAllDto();
-//            orderDto.setId(order.getId());
-//
-//            // Преобразуем список продуктов Order в список ProductDto
-//            List<ProductDto> productDtoList = order.getProduct().stream()
-//                    .map(this::convertToProductDto)
-//                    .collect(Collectors.toList());
-//
-//            orderDto.setProduct(productDtoList);
-//            orderDto.setDateTime(order.getDateTime());
-//            orderDto.setTotalPrice(order.getTotalPrice());
-//            orderDto.setStatus(order.getStatus());
-//            // Установка значения поля user
-//            orderDto.setUser(UserDto.builder()
-//                    .id(order.getUser().getId())
-//                    .name(order.getUser().getName())
-//                    .email(order.getUser().getEmail())
-//                    .phone(order.getUser().getPhone())
-//                    .address(order.getUser().getAddress())
-//                    .password(order.getUser().getPassword())
-//                    .build());
-//
-//            orderDtoList.add(orderDto);
-//        }
-//
-//        return orderDtoList;
-        return null;
+        log.info("Получить все заказы");
+        List<Order> allOrders = orderRepository.findAll();
+        List<OrderGetAllDto> orderDtoList = new ArrayList<>();
+
+        for (Order order : allOrders) {
+            log.info("Получение заказа с id: {}", order.getId());
+            OrderGetAllDto orderDto = new OrderGetAllDto();
+            orderDto.setId(order.getId());
+
+            List<OrderedProductDto> orderedProducts = order.getOrderedProducts().stream()
+                    .map(this::convertToOrderedProductDto)
+                    .collect(Collectors.toList());
+
+            orderDto.setOrderedProducts(orderedProducts);
+            orderDto.setDateTime(order.getDateTime());
+            orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
+            orderDto.setStatus(order.getStatus());
+            orderDto.setUser(convertToUserDto(order.getUser()));
+
+            orderDtoList.add(orderDto);
+        }
+        return orderDtoList;
     }
 
     // TODO сейчас не находит в БД продукты по UUID просто как пример
@@ -199,17 +188,21 @@ public class OrderServiceImpl implements OrderService {
 //    }
 
     private OrderGetAllDto convertOrderToProductDto(Order order) {
+        log.info("Преобразование заказа в список продуктов с id: {}", order.getId());
         OrderGetAllDto orderDto = new OrderGetAllDto();
         orderDto.setId(order.getId());
 
         List<OrderedProductDto> productDtoList = order.getOrderedProducts().stream()
-                .map(orderedProduct -> OrderedProductDto
-                        .builder()
-                        .productId(orderedProduct.getProduct().getId())
-                        .productName(orderedProduct.getName())
-                        .productPrice(orderedProduct.getPrice())
-                        .productQuantity(orderedProduct.getQuantity())
-                        .build())
+                .map(orderedProduct -> {
+                    log.info("Преобразование заказанных продуктов с id: {}", orderedProduct.getProduct().getId());
+                    return OrderedProductDto
+                            .builder()
+                            .productId(orderedProduct.getProduct().getId())
+                            .productName(orderedProduct.getName())
+                            .productPrice(orderedProduct.getPrice())
+                            .productQuantity(orderedProduct.getQuantity())
+                            .build();
+                })
                 .collect(Collectors.toList());
         orderDto.setOrderedProducts(productDtoList);
         orderDto.setDateTime(order.getDateTime());
@@ -226,6 +219,24 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
+    private OrderedProductDto convertToOrderedProductDto(OrderedProduct orderedProduct) {
+        log.info("Преобразование заказанного продукта с id: {}", orderedProduct.getProduct().getId());
+        return OrderedProductDto.builder()
+                .productQuantity(orderedProduct.getQuantity())
+                .build();
+    }
+
+    private UserDto convertToUserDto(User user) {
+        log.info("Преобразование пользователя с id: {}", user.getId());
+        return UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .address(user.getAddress())
+                .password(user.getPassword())
+                .build();
+    }
 }
 
 
