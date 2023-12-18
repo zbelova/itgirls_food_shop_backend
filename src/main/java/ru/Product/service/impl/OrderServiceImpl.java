@@ -51,7 +51,19 @@ public class OrderServiceImpl implements OrderService {
 
         for (Order order : allOrders) {
             log.info("Получение заказа с id: {}", order.getId());
-            OrderGetAllDto orderDto = convertToOrderGetAllDto(order);
+            OrderGetAllDto orderDto = new OrderGetAllDto();
+            orderDto.setId(order.getId());
+
+            List<OrderedProductDto> orderedProducts = order.getOrderedProducts().stream()
+                    .map(this::convertToOrderedProductDto)
+                    .collect(Collectors.toList());
+
+            orderDto.setOrderedProducts(orderedProducts);
+            orderDto.setDateTime(order.getDateTime());
+            orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
+            orderDto.setStatus(order.getStatus());
+            orderDto.setUser(convertToUserDto(order.getUser()));
+
             orderDtoList.add(orderDto);
         }
         return orderDtoList;
@@ -200,17 +212,6 @@ public class OrderServiceImpl implements OrderService {
                 .address(order.getUser().getAddress())
                 .password(order.getUser().getPassword())
                 .build());
-        return orderDto;
-    }
-
-    private OrderGetAllDto convertToOrderGetAllDto(Order order) {
-        OrderGetAllDto orderDto = new OrderGetAllDto();
-        orderDto.setId(order.getId());
-        orderDto.setOrderedProducts(convertToOrderedProducts(order.getOrderedProducts()));
-        orderDto.setDateTime(order.getDateTime());
-        orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
-        orderDto.setStatus(order.getStatus());
-        orderDto.setUser(convertToUserDto(order.getUser()));
         return orderDto;
     }
 }
