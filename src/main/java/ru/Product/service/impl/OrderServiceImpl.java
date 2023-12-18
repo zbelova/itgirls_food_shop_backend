@@ -188,17 +188,21 @@ public class OrderServiceImpl implements OrderService {
 //    }
 
     private OrderGetAllDto convertOrderToProductDto(Order order) {
+        log.info("Преобразование заказа в список продуктов с id: {}", order.getId());
         OrderGetAllDto orderDto = new OrderGetAllDto();
         orderDto.setId(order.getId());
 
         List<OrderedProductDto> productDtoList = order.getOrderedProducts().stream()
-                .map(orderedProduct -> OrderedProductDto
-                        .builder()
-                        .productId(orderedProduct.getProduct().getId())
-                        .productName(orderedProduct.getName())
-                        .productPrice(orderedProduct.getPrice())
-                        .productQuantity(orderedProduct.getQuantity())
-                        .build())
+                .map(orderedProduct -> {
+                    log.info("Преобразование заказанных продуктов с id: {}", orderedProduct.getProduct().getId());
+                    return OrderedProductDto
+                            .builder()
+                            .productId(orderedProduct.getProduct().getId())
+                            .productName(orderedProduct.getName())
+                            .productPrice(orderedProduct.getPrice())
+                            .productQuantity(orderedProduct.getQuantity())
+                            .build();
+                })
                 .collect(Collectors.toList());
         orderDto.setOrderedProducts(productDtoList);
         orderDto.setDateTime(order.getDateTime());
@@ -216,12 +220,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderedProductDto convertToOrderedProductDto(OrderedProduct orderedProduct) {
+        log.info("Преобразование заказанного продукта с id: {}", orderedProduct.getProduct().getId());
         return OrderedProductDto.builder()
                 .productQuantity(orderedProduct.getQuantity())
                 .build();
     }
 
     private UserDto convertToUserDto(User user) {
+        log.info("Преобразование пользователя с id: {}", user.getId());
         return UserDto.builder()
                 .id(user.getId())
                 .name(user.getName())
