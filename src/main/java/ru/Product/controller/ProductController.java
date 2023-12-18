@@ -60,7 +60,7 @@ public class ProductController {
 
     @DeleteMapping("/delete")
     @Operation(summary = "Удаление продукта")
-    public void deleteBook(@RequestBody ProductDto productDto) {
+    public void deleteProduct(@RequestBody ProductDto productDto) {
         UUID productId = productDto.getId();
         productService.deleteProduct(productId);
     }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="alter-order-table" author="ssagan">
+        <sql>
+            ALTER TABLE IF EXISTS "order" DROP COLUMN IF EXISTS products;
+            ALTER TABLE IF EXISTS "order" ADD COLUMN IF NOT EXISTS address varchar NOT NULL DEFAULT '';
+        </sql>
+    </changeSet>
+</databaseChangeLog>

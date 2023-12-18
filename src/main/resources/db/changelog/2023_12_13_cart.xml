@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="create-cart-table" author="postgres">
+        <sql>
+            CREATE TABLE IF NOT EXISTS cart (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            user_id UUID UNIQUE NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES "user"(id)
+            );
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-cart-item-table" author="postgres">
+        <sql>
+            CREATE TABLE IF NOT EXISTS cart_item (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            cart_id UUID NOT NULL,
+            product_id UUID NOT NULL,
+            quantity INT NOT NULL,
+            FOREIGN KEY (cart_id) REFERENCES cart(id),
+            FOREIGN KEY (product_id) REFERENCES product(id)
+            );
+
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

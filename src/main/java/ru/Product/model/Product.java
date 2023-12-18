@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
+import java.util.Set;
 import java.util.UUID;
 @Entity
 @Table(name="product")
@@ -41,4 +41,10 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product")
+    private Set<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "product")
+    private Set<OrderedProduct> orderedProducts;
 }
