@@ -249,6 +249,21 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
+    private List<OrderedProductDto> convertToOrderItemDtos(Set<OrderedProduct> orderedProductDtos) {
+        return orderedProductDtos.stream()
+                .map(this::convertToOrderItemDto)
+                .collect(Collectors.toList());
+    }
+
+    private OrderedProductDto convertToOrderItemDto(OrderedProduct orderedProductDto) {
+        return OrderedProductDto.builder()
+                .productId(orderedProductDto.getProduct().getId())
+                .productName(orderedProductDto.getName())
+                .productPrice(orderedProductDto.getPrice())
+                .productQuantity(orderedProductDto.getQuantity())
+                .build();
+    }
+
     private UserDto convertToUserDto(User user) {
         log.info("Преобразование пользователя с id: {}", user.getId());
         return UserDto.builder()
