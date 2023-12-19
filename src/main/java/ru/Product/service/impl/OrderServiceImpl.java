@@ -71,6 +71,27 @@ public class OrderServiceImpl implements OrderService {
         return orderDtoList;
     }
 
+    @Override
+    public OrderGetAllDto getOrderById(UUID id) {
+        log.info("Получение заказа с id: {}", id);
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        if (optionalOrder.isEmpty()) {
+            log.error("Заказ с id {} не найден", id);
+            throw new NotFoundException("Заказ с id" + id + " не найден");
+        } else {
+            Order order = optionalOrder.get();
+            log.info("Заказ найден");
+            OrderGetAllDto orderDto = new OrderGetAllDto();
+            orderDto.setId(order.getId());
+            orderDto.setOrderedProducts(convertToOrderItemDtos(order.getOrderedProducts()));
+            orderDto.setStatus(order.getStatus());
+            orderDto.setUser(convertToUserDto(order.getUser()));
+            orderDto.setDateTime(order.getDateTime());
+            orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
+            return orderDto;
+        }
+    }
+
     // TODO сейчас не находит в БД продукты по UUID просто как пример
     @Override
     public OrderSaveDto createOrder(OrderSaveDto orderSaveDto) {
