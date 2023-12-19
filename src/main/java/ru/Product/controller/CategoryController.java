@@ -64,5 +64,10 @@ public class CategoryController {
 
     }
 
-
+    @DeleteMapping("/delete")
+    @Operation(summary = "Удаление категории")
+    public void deleteCategory(@RequestBody CategoryDto categoryDto) {
+        UUID categoryId = categoryDto.getId();
+        categoryService.deleteCategory(categoryId);
+    }
 }
