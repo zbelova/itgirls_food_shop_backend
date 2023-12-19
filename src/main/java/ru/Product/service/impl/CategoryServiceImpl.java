@@ -1,6 +1,10 @@
 package ru.Product.service.impl;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.NonUniqueResultException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.engine.transaction.jta.platform.internal.SynchronizationRegistryBasedSynchronizationStrategy;
+import org.springframework.boot.ExitCodeEvent;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import ru.Product.dto.CategoryCreateDto;
@@ -43,22 +47,32 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto createCategory(CategoryCreateDto categoryCreateDto) {
-        Category newCategory = convertToCategoryEntity(categoryCreateDto);
-        Category savedCategory = categoryRepository.save(newCategory);
-        return convertToCategoryDto(savedCategory);
+        String name = categoryCreateDto.getName();
+        Category optionalCategory = categoryRepository.findByName(name);
+        if (optionalCategory!=null)
+            throw new EntityExistsException("Category with name " + name + " already  exists" );
+        else {
+            Category newCategory = convertToCategoryEntity(categoryCreateDto);
+            Category savedCategory = categoryRepository.save(newCategory);
+            return convertToCategoryDto(savedCategory);
+        }
     }
 
     @Override
     public CategoryDto updateCategory(UUID id, CategoryUpdateDto categoryUpdateDto) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
+        String  newNameCategory = categoryUpdateDto.getName();
+        Category foundCategory = categoryRepository.findByName(newNameCategory);
         if (optionalCategory.isPresent()) {
             Category existingCategory = optionalCategory.get();
-            existingCategory.setName(categoryUpdateDto.getName());
-            existingCategory.setImage(categoryUpdateDto.getImage());
-
-            Category updatedCategory = categoryRepository.save(existingCategory);
-
-            return convertToCategoryDto(updatedCategory);
+            if (foundCategory!=null)
+                throw new EntityExistsException("Category with name " + newNameCategory + " already  exists" );
+            else {
+                existingCategory.setName(categoryUpdateDto.getName());
+                existingCategory.setImage(categoryUpdateDto.getImage());
+                Category updatedCategory = categoryRepository.save(existingCategory);
+                return convertToCategoryDto(updatedCategory);
+            }
         } else {
             throw new NotFoundException("Category not found with id: " + id);
         }
