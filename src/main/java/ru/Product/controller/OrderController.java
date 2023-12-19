@@ -33,6 +33,13 @@ public class OrderController {
         return orderService.getAllOrders();
     }
 
+    @GetMapping("/getOrderById")
+    @Operation(summary = "Получение заказов по id")
+    public OrderGetAllDto getOrderById(
+            @Parameter(description = "id заказа", required = true) @RequestParam(value = "id") String id) {
+        return orderService.getOrderById(UUID.fromString(id));
+    }
+
     // TODO сейчас не находит в БД продукты по UUID просто как пример, выпилить
     /*@PostMapping("/saveOrder")
     @Operation(summary = "Добавление заказа")
