@@ -73,14 +73,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderGetAllDto getOrderById(UUID id) {
-        log.info("Получение заказа с id: {}", id);
+        log.info("Получение заказа по id: {}", id);
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isEmpty()) {
-            log.error("Заказ с id {} не найден", id);
+            log.error("Заказ не найден по id: {}", id);
             throw new NotFoundException("Заказ с id" + id + " не найден");
         } else {
             Order order = optionalOrder.get();
-            log.info("Заказ найден");
+            log.info("Заказ получен с id: {}", order.getId());
             OrderGetAllDto orderDto = new OrderGetAllDto();
             orderDto.setId(order.getId());
             orderDto.setOrderedProducts(convertToOrderItemDtos(order.getOrderedProducts()));
