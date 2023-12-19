@@ -9,7 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * author - IT Girls, группа backend3
+ * author - IT Girls, группа backend3 & backend4
  */
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "Product API", version = "1.0", description = "Магазин продуктов"))

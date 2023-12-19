@@ -3,8 +3,10 @@ package ru.Product.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.persistence.EntityExistsException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.Product.dto.CategoryCreateDto;
@@ -39,17 +41,27 @@ public class CategoryController {
 
     @PostMapping("/create")
     @Operation(summary = "Создание новой категории")
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody @Valid CategoryCreateDto categoryCreateDto) {
-        CategoryDto createdCategory = categoryService.createCategory(categoryCreateDto);
-        return ResponseEntity.ok(createdCategory);
+    public ResponseEntity  createCategory(@RequestBody @Valid CategoryCreateDto categoryCreateDto) {
+        try {
+            CategoryDto createdCategory = categoryService.createCategory(categoryCreateDto);
+            return ResponseEntity.ok(createdCategory);
+        } catch (EntityExistsException e) {
+            return ResponseEntity.badRequest().body("Такая категория уже существует");
+        }
     }
 
     @PutMapping("/update")
     @Operation(summary = "Обновление категории")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody @Valid CategoryUpdateDto categoryUpdateDto) {
+    public ResponseEntity updateCategory(@RequestBody @Valid CategoryUpdateDto categoryUpdateDto) {
         UUID categoryId = UUID.fromString(categoryUpdateDto.getId());
-        CategoryDto updatedCategory = categoryService.updateCategory(categoryId, categoryUpdateDto);
-        return ResponseEntity.ok(updatedCategory);
+        try {
+            CategoryDto updatedCategory = categoryService.updateCategory(categoryId, categoryUpdateDto);
+            return ResponseEntity.ok(updatedCategory);
+        }
+        catch (EntityExistsException e) {
+            return ResponseEntity.badRequest().body("Такая категория уже существует");
+        }
+
     }
 
     @DeleteMapping("/delete")
