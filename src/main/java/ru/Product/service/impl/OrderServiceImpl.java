@@ -154,6 +154,23 @@ public class OrderServiceImpl implements OrderService {
         return orderDtoMapper.toDto(savedOrder);
     }
 
+    @Override
+    public void updateProductQuantityInOrder(UUID orderId, UUID productId, int quantity) {
+        log.info("Изменение количества продукта с id {} в заказе с id {} на {}", productId, orderId, quantity);
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            OrderedProduct orderedProduct = order.getOrderedProducts().stream()
+                    .filter(orderedItem -> orderedItem.getProduct().getId().equals(productId))
+                    .findFirst().orElseThrow(() -> new NotFoundException("Продукт не найден с id: " + productId + " в заказе с id: " + orderId));
+            orderedProduct.setQuantity(quantity);
+            orderRepository.save(order);
+            log.info("Количество продуктов с id {} в заказе с id {} изменено на {}", productId, orderId, quantity);
+        } else {
+            throw new NotFoundException("Заказ не найден по id: " + orderId);
+        }
+    }
+
     private Set<OrderedProduct> getOrderedProducts(Cart cart, Order order) {
         log.info("Определение продуктов из корзины");
         Set<CartItem> cartItems = cart.getCartItems();
