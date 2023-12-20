@@ -183,13 +183,7 @@ public class OrderServiceImpl implements OrderService {
         if (optionalOrder.isPresent() && optionalProduct.isPresent()) {
             Order order = optionalOrder.get();
             Product product = optionalProduct.get();
-            OrderedProduct orderedProduct = OrderedProduct.builder()
-                    .product(product)
-                    .name(product.getName())
-                    .order(order)
-                    .quantity(quantity)
-                    .price(product.getPrice().intValue())
-                    .build();
+            OrderedProduct orderedProduct = createOrderedProduct(order, product, quantity);
             order.getOrderedProducts().add(orderedProduct);
             orderRepository.save(order);
             log.info("Продукт с id {} добавлен в заказ с id {} на {} шт.", productId, orderId, quantity);
