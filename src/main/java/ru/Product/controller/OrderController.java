@@ -56,4 +56,33 @@ public class OrderController {
     public OrderDto createOrder(@RequestParam("user_id") String user_id) {
         return orderService.createOrder(UUID.fromString(user_id));
     }
+
+    @PutMapping("/updateProductQuantityInOrder")
+    @Operation(summary = "Изменение количества продуктов в заказе")
+    public void updateProductQuantityInOrder(
+            @Parameter(description = "id заказа", required = true) @RequestParam(value = "orderId") String orderId,
+            @Parameter(description = "id продукта", required = true) @RequestParam(value = "productId") String productId,
+            @Parameter(description = "количество продуктов", required = true) @RequestParam(value = "quantity") int quantity
+    ) {
+        orderService.updateOrderItemQuantity(UUID.fromString(orderId), UUID.fromString(productId), quantity);
+    }
+
+    @PutMapping("/addProductToOrder")
+    @Operation(summary = "Добавление продукта в заказ")
+    public void addProductToOrder(
+            @Parameter(description = "id заказа", required = true) @RequestParam(value = "orderId") String orderId,
+            @Parameter(description = "id продукта", required = true) @RequestParam(value = "productId") String productId,
+            @Parameter(description = "количество продуктов", required = true) @RequestParam(value = "quantity") int quantity
+    ) {
+        orderService.addProductToOrder(UUID.fromString(orderId), UUID.fromString(productId), quantity);
+    }
+
+    @DeleteMapping("/removeProductFromOrder")
+    @Operation(summary = "Удаление продукта из заказа")
+    public void removeProductFromOrder(
+            @Parameter(description = "id заказа", required = true) @RequestParam(value = "orderId") String orderId,
+            @Parameter(description = "id продукта", required = true) @RequestParam(value = "productId") String productId
+    ) {
+        orderService.removeProductFromOrder(UUID.fromString(orderId), UUID.fromString(productId));
+    }
 }

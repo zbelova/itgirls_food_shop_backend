@@ -8,6 +8,7 @@ import ru.Product.dto.*;
 import ru.Product.dto.mapper.OrderDtoMapper;
 import ru.Product.model.*;
 import ru.Product.repository.OrderRepository;
+import ru.Product.repository.ProductRepository;
 import ru.Product.repository.UserRepository;
 import ru.Product.service.CartService;
 import ru.Product.service.OrderService;
@@ -24,6 +25,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
     private final OrderDtoMapper orderDtoMapper;
     private final CartService cartService;
 
@@ -50,22 +52,18 @@ public class OrderServiceImpl implements OrderService {
         log.info("Получить все заказы");
         List<Order> allOrders = orderRepository.findAll();
         List<OrderGetAllDto> orderDtoList = new ArrayList<>();
-
         for (Order order : allOrders) {
             log.info("Получение заказа с id: {}", order.getId());
             OrderGetAllDto orderDto = new OrderGetAllDto();
             orderDto.setId(order.getId());
-
             List<OrderedProductDto> orderedProducts = order.getOrderedProducts().stream()
                     .map(this::convertToOrderedProductDto)
                     .collect(Collectors.toList());
-
             orderDto.setOrderedProducts(orderedProducts);
             orderDto.setDateTime(order.getDateTime());
             orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
             orderDto.setStatus(order.getStatus());
             orderDto.setUser(convertToUserDto(order.getUser()));
-
             orderDtoList.add(orderDto);
         }
         return orderDtoList;
@@ -152,6 +150,64 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return orderDtoMapper.toDto(savedOrder);
+    }
+
+    @Override
+    public void updateOrderItemQuantity(UUID orderId, UUID productId, int quantity) {
+        log.info("Изменение количества продукта с id {} в заказе с id {} на {} шт.", productId, orderId, quantity);
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            Optional<OrderedProduct> optionalOrderedProduct = getOrderedProduct(order, productId);
+            optionalOrderedProduct.ifPresent(orderedProduct -> {
+                log.info("Количество продукта с id {} в заказе с id {} равно {}", productId, orderId, orderedProduct.getQuantity());
+                orderedProduct.setQuantity(quantity);
+                orderRepository.save(order);
+                log.info("Изменено количество продукта с id {} в заказе с id {} на {} шт.", productId, orderId, quantity);
+            });
+            if (optionalOrderedProduct.isEmpty()) {
+                throw new NotFoundException("Продукт с id " + productId + " не найден в заказе с id " + orderId);
+            }
+        } else {
+            throw new NotFoundException("Заказ с id " + orderId + " не найден");
+        }
+    }
+
+    @Override
+    public void addProductToOrder(UUID orderId, UUID productId, int quantity) {
+        log.info("Добавление продукта с id {} в заказ с id {} на {} шт.", productId, orderId, quantity);
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalOrder.isPresent() && optionalProduct.isPresent()) {
+            Order order = optionalOrder.get();
+            Product product = optionalProduct.get();
+            OrderedProduct orderedProduct = createOrderedProduct(order, product, quantity);
+            order.getOrderedProducts().add(orderedProduct);
+            orderRepository.save(order);
+            log.info("Продукт с id {} добавлен в заказ с id {} на {} шт.", productId, orderId, quantity);
+        } else {
+            throw new NotFoundException("Заказ с id " + orderId + " или продукт с id " + productId + " не найден");
+        }
+    }
+
+    @Override
+    public void removeProductFromOrder(UUID orderId, UUID productId) {
+        log.info("Удаление продукта с id {} из заказа c id {}", productId, orderId);
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            Optional<OrderedProduct> optionalOrderedProduct = getOrderedProduct(order, productId);
+            if (optionalOrderedProduct.isPresent()) {
+                OrderedProduct orderedProduct = optionalOrderedProduct.get();
+                order.getOrderedProducts().remove(orderedProduct);
+                orderRepository.save(order);
+                log.info("Продукт с id {} удалён из заказа с id {}", productId, orderId);
+            } else {
+                throw new NotFoundException("Продукт с id " + productId + " не найден в заказе с id " + orderId);
+            }
+        } else {
+            throw new NotFoundException("Заказ с id " + orderId + " не найден");
+        }
     }
 
     private Set<OrderedProduct> getOrderedProducts(Cart cart, Order order) {
@@ -273,6 +329,22 @@ public class OrderServiceImpl implements OrderService {
                 .phone(user.getPhone())
                 .address(user.getAddress())
                 .password(user.getPassword())
+                .build();
+    }
+
+    private Optional<OrderedProduct> getOrderedProduct(Order order, UUID productId) {
+        return order.getOrderedProducts().stream()
+                .filter(orderedProduct -> orderedProduct.getProduct().getId().equals(productId))
+                .findFirst();
+    }
+
+    private OrderedProduct createOrderedProduct(Order order, Product product, int quantity) {
+        return OrderedProduct.builder()
+                .product(product)
+                .name(product.getName())
+                .order(order)
+                .quantity(quantity)
+                .price(product.getPrice().intValue())
                 .build();
     }
 }
