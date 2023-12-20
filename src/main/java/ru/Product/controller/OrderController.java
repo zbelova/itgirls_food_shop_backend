@@ -56,4 +56,14 @@ public class OrderController {
     public OrderDto createOrder(@RequestParam("user_id") String user_id) {
         return orderService.createOrder(UUID.fromString(user_id));
     }
+
+    @PutMapping("/updateProductQuantityInOrder")
+    @Operation(summary = "Изменение количества продуктов в заказе")
+    public void updateProductQuantityInOrder(
+            @Parameter(description = "id заказа", required = true) @RequestParam(value = "orderId") String orderId,
+            @Parameter(description = "id продукта", required = true) @RequestParam(value = "productId") String productId,
+            @Parameter(description = "количество продуктов", required = true) @RequestParam(value = "quantity") int quantity
+    ) {
+        orderService.updateProductQuantityInOrder(UUID.fromString(orderId), UUID.fromString(productId), quantity);
+    }
 }
