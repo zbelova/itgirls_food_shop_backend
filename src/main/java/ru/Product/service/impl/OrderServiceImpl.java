@@ -156,18 +156,24 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateProductQuantityInOrder(UUID orderId, UUID productId, int quantity) {
-        log.info("Изменение количества продукта с id {} в заказе с id {} на {}", productId, orderId, quantity);
+        log.info("Изменение количества продукта с id {} в заказе с id {} на {} шт.", productId, orderId,quantity);
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            OrderedProduct orderedProduct = order.getOrderedProducts().stream()
-                    .filter(orderedItem -> orderedItem.getProduct().getId().equals(productId))
-                    .findFirst().orElseThrow(() -> new NotFoundException("Продукт не найден с id: " + productId + " в заказе с id: " + orderId));
-            orderedProduct.setQuantity(quantity);
-            orderRepository.save(order);
-            log.info("Количество продуктов с id {} в заказе с id {} изменено на {}", productId, orderId, quantity);
+            Optional<OrderedProduct> optionalOrderedProduct = order.getOrderedProducts().stream()
+                    .filter(orderedProduct -> orderedProduct.getProduct().getId().equals(productId))
+                    .findFirst();
+            if (optionalOrderedProduct.isPresent()) {
+                OrderedProduct orderedProduct = optionalOrderedProduct.get();
+                log.info("Количество продукта с id {} в заказе с id {} равно {}", productId, orderId, orderedProduct.getQuantity());
+                orderedProduct.setQuantity(quantity);
+                orderRepository.save(order);
+                log.info("Изменено количество продукта с id {} в заказе с id {} на {} шт.", productId, orderId, quantity);
+            } else {
+                throw new NotFoundException("Продукт с id " + productId + " не найден в заказе с id " + orderId);
+            }
         } else {
-            throw new NotFoundException("Заказ не найден по id: " + orderId);
+            throw new NotFoundException("Заказ с id " + orderId + " не найден");
         }
     }
 
