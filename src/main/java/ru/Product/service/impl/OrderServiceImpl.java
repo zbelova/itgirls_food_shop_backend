@@ -208,9 +208,17 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            order.getOrderedProducts().removeIf(orderedProduct -> orderedProduct.getProduct().getId().equals(productId));
-            orderRepository.save(order);
-            log.info("Продукт с id {} удалён из заказа с id {}", productId, orderId);
+            Optional<OrderedProduct> optionalOrderedProduct = order.getOrderedProducts().stream()
+                    .filter(orderedProduct -> orderedProduct.getProduct().getId().equals(productId))
+                    .findFirst();
+            if (optionalOrderedProduct.isPresent()) {
+                OrderedProduct orderedProduct = optionalOrderedProduct.get();
+                order.getOrderedProducts().remove(orderedProduct);
+                orderRepository.save(order);
+                log.info("Продукт с id {} удалён из заказа с id {}", productId, orderId);
+            } else {
+                throw new NotFoundException("Продукт с id " + productId + " не найден в заказе с id " + orderId);
+            }
         } else {
             throw new NotFoundException("Заказ с id " + orderId + " не найден");
         }
