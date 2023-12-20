@@ -155,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateProductQuantityInOrder(UUID orderId, UUID productId, int quantity) {
+    public void updateOrderItemQuantity(UUID orderId, UUID productId, int quantity) {
         log.info("Изменение количества продукта с id {} в заказе с id {} на {} шт.", productId, orderId,quantity);
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
