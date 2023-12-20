@@ -339,6 +339,16 @@ public class OrderServiceImpl implements OrderService {
                 .filter(orderedProduct -> orderedProduct.getProduct().getId().equals(productId))
                 .findFirst();
     }
+
+    private OrderedProduct createOrderedProduct(Order order, Product product, int quantity) {
+        return OrderedProduct.builder()
+                .product(product)
+                .name(product.getName())
+                .order(order)
+                .quantity(quantity)
+                .price(product.getPrice().intValue())
+                .build();
+    }
 }
 
 
