@@ -16,4 +16,5 @@ public interface OrderService {
     OrderDto createOrder(UUID user_id);
     void updateOrderItemQuantity(UUID orderId, UUID productId, int quantity);
     void addProductToOrder(UUID orderId, UUID productId, int quantity);
+    void removeProductFromOrder(UUID orderId, UUID productId);
 }
