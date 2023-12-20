@@ -19,9 +19,8 @@ public class OrderStatus {
     @Column(name = "status_id")
     private Integer statusId;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "status_name", nullable = false)
-    private StatusName name;
+    private String name;
 
     @Column(name = "description")
     private String description;
