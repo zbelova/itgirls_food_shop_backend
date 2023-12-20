@@ -154,20 +154,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateOrderItemQuantity(UUID orderId, UUID productId, int quantity) {
-        log.info("Изменение количества продукта с id {} в заказе с id {} на {} шт.", productId, orderId,quantity);
+        log.info("Изменение количества продукта с id {} в заказе с id {} на {} шт.", productId, orderId, quantity);
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            Optional<OrderedProduct> optionalOrderedProduct = order.getOrderedProducts().stream()
-                    .filter(orderedProduct -> orderedProduct.getProduct().getId().equals(productId))
-                    .findFirst();
-            if (optionalOrderedProduct.isPresent()) {
-                OrderedProduct orderedProduct = optionalOrderedProduct.get();
+            Optional<OrderedProduct> optionalOrderedProduct = getOrderedProduct(order, productId);
+            optionalOrderedProduct.ifPresent(orderedProduct -> {
                 log.info("Количество продукта с id {} в заказе с id {} равно {}", productId, orderId, orderedProduct.getQuantity());
                 orderedProduct.setQuantity(quantity);
                 orderRepository.save(order);
                 log.info("Изменено количество продукта с id {} в заказе с id {} на {} шт.", productId, orderId, quantity);
-            } else {
+            });
+            if (optionalOrderedProduct.isEmpty()) {
                 throw new NotFoundException("Продукт с id " + productId + " не найден в заказе с id " + orderId);
             }
         } else {
