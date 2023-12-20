@@ -64,6 +64,6 @@ public class OrderController {
             @Parameter(description = "id продукта", required = true) @RequestParam(value = "productId") String productId,
             @Parameter(description = "количество продуктов", required = true) @RequestParam(value = "quantity") int quantity
     ) {
-        orderService.updateProductQuantityInOrder(UUID.fromString(orderId), UUID.fromString(productId), quantity);
+        orderService.updateOrderItemQuantity(UUID.fromString(orderId), UUID.fromString(productId), quantity);
     }
 }
