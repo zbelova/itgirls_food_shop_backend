@@ -76,4 +76,13 @@ public class OrderController {
     ) {
         orderService.addProductToOrder(UUID.fromString(orderId), UUID.fromString(productId), quantity);
     }
+
+    @DeleteMapping("/removeProductFromOrder")
+    @Operation(summary = "Удаление продукта из заказа")
+    public void removeProductFromOrder(
+            @Parameter(description = "id заказа", required = true) @RequestParam(value = "orderId") String orderId,
+            @Parameter(description = "id продукта", required = true) @RequestParam(value = "productId") String productId
+    ) {
+        orderService.removeProductFromOrder(UUID.fromString(orderId), UUID.fromString(productId));
+    }
 }
