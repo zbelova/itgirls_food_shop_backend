@@ -204,9 +204,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            Optional<OrderedProduct> optionalOrderedProduct = order.getOrderedProducts().stream()
-                    .filter(orderedProduct -> orderedProduct.getProduct().getId().equals(productId))
-                    .findFirst();
+            Optional<OrderedProduct> optionalOrderedProduct = getOrderedProduct(order, productId);
             if (optionalOrderedProduct.isPresent()) {
                 OrderedProduct orderedProduct = optionalOrderedProduct.get();
                 order.getOrderedProducts().remove(orderedProduct);
