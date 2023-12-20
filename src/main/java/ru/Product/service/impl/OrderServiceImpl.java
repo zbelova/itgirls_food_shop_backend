@@ -339,6 +339,12 @@ public class OrderServiceImpl implements OrderService {
                 .password(user.getPassword())
                 .build();
     }
+
+    private Optional<OrderedProduct> getOrderedProduct(Order order, UUID productId) {
+        return order.getOrderedProducts().stream()
+                .filter(orderedProduct -> orderedProduct.getProduct().getId().equals(productId))
+                .findFirst();
+    }
 }
 
 
