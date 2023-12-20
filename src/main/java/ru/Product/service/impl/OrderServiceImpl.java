@@ -8,6 +8,7 @@ import ru.Product.dto.*;
 import ru.Product.dto.mapper.OrderDtoMapper;
 import ru.Product.model.*;
 import ru.Product.repository.OrderRepository;
+import ru.Product.repository.ProductRepository;
 import ru.Product.repository.UserRepository;
 import ru.Product.service.CartService;
 import ru.Product.service.OrderService;
@@ -24,6 +25,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
     private final OrderDtoMapper orderDtoMapper;
     private final CartService cartService;
 
@@ -174,6 +176,27 @@ public class OrderServiceImpl implements OrderService {
             }
         } else {
             throw new NotFoundException("Заказ с id " + orderId + " не найден");
+        }
+    }
+
+    @Override
+    public void addProductToOrder(UUID orderId, UUID productId, int quantity) {
+        log.info("Добавление продукта с id {} в заказ с id {} на {} шт.", productId, orderId, quantity);
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalOrder.isPresent() && optionalProduct.isPresent()) {
+            Order order = optionalOrder.get();
+            Product product = optionalProduct.get();
+            OrderedProduct orderedProduct = OrderedProduct.builder()
+                    .product(product)
+                    .quantity(quantity)
+                    .price(product.getPrice().intValue())
+                    .build();
+            order.getOrderedProducts().add(orderedProduct);
+            orderRepository.save(order);
+            log.info("Продукт с id {} добавлен в заказ с id {} на {} шт.", productId, orderId, quantity);
+        } else {
+            throw new NotFoundException("Заказ с id " + orderId + " или продукт с id " + productId + " не найден");
         }
     }
 
