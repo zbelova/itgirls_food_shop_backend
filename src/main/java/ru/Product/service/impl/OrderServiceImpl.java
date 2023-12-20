@@ -189,6 +189,8 @@ public class OrderServiceImpl implements OrderService {
             Product product = optionalProduct.get();
             OrderedProduct orderedProduct = OrderedProduct.builder()
                     .product(product)
+                    .name(product.getName())
+                    .order(order)
                     .quantity(quantity)
                     .price(product.getPrice().intValue())
                     .build();
