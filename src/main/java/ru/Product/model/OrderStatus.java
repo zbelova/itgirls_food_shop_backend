@@ -1,9 +1,6 @@
 package ru.Product.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +15,13 @@ import lombok.Setter;
 @Table(name = "order_status")
 public class OrderStatus {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "status_id")
     private Integer statusId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status_name", nullable = false)
-    private String statusName;
+    private StatusName name;
 
     @Column(name = "description")
     private String description;
