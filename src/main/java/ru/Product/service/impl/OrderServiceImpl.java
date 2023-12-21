@@ -183,6 +183,9 @@ public class OrderServiceImpl implements OrderService {
         if (optionalOrder.isPresent() && optionalProduct.isPresent()) {
             Order order = optionalOrder.get();
             Product product = optionalProduct.get();
+            if (isProductAlreadyInOrder(order, product)) {
+                throw new IllegalArgumentException("Продукт с id " + productId + " уже есть в заказе с id " + orderId);
+            }
             OrderedProduct orderedProduct = createOrderedProduct(order, product, quantity);
             order.getOrderedProducts().add(orderedProduct);
             orderRepository.save(order);
@@ -349,6 +352,15 @@ public class OrderServiceImpl implements OrderService {
                 .quantity(quantity)
                 .price(product.getPrice().intValue())
                 .build();
+    }
+
+    private boolean isProductAlreadyInOrder(Order order, Product product) {
+        for (OrderedProduct orderedProduct : order.getOrderedProducts()) {
+            if (orderedProduct.getProduct().equals(product)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
