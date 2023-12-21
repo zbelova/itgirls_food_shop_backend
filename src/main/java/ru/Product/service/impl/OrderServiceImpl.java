@@ -8,6 +8,7 @@ import ru.Product.dto.*;
 import ru.Product.dto.mapper.OrderDtoMapper;
 import ru.Product.model.*;
 import ru.Product.repository.OrderRepository;
+import ru.Product.repository.OrderedProductRepository;
 import ru.Product.repository.ProductRepository;
 import ru.Product.repository.UserRepository;
 import ru.Product.service.CartService;
@@ -26,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final OrderedProductRepository orderedProductRepository;
     private final OrderDtoMapper orderDtoMapper;
     private final CartService cartService;
 
@@ -192,7 +194,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void removeProductFromOrder(UUID orderId, UUID productId) {
-        log.info("Удаление продукта с id {} из заказа c id {}", productId, orderId);
+        log.info("Удаление продукта с id {} из заказа с id {}", productId, orderId);
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
@@ -201,6 +203,7 @@ public class OrderServiceImpl implements OrderService {
                 OrderedProduct orderedProduct = optionalOrderedProduct.get();
                 order.getOrderedProducts().remove(orderedProduct);
                 orderRepository.save(order);
+                orderedProductRepository.delete(orderedProduct);
                 log.info("Продукт с id {} удалён из заказа с id {}", productId, orderId);
             } else {
                 throw new NotFoundException("Продукт с id " + productId + " не найден в заказе с id " + orderId);
