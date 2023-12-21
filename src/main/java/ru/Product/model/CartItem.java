@@ -20,8 +20,12 @@ public class CartItem {
     @Column(name = "id", columnDefinition = "uuid")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
+    @ManyToOne(
+            //optional = false,
+            fetch = FetchType.EAGER
+            //cascade = CascadeType.ALL
+    )
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private Cart cart;
 
     @ManyToOne
