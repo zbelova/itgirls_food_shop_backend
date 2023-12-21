@@ -353,6 +353,15 @@ public class OrderServiceImpl implements OrderService {
                 .price(product.getPrice().intValue())
                 .build();
     }
+
+    private boolean isProductAlreadyInOrder(Order order, Product product) {
+        for (OrderedProduct orderedProduct : order.getOrderedProducts()) {
+            if (orderedProduct.getProduct().equals(product)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 
