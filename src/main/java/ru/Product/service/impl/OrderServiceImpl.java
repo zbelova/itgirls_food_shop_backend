@@ -92,38 +92,6 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    // TODO сейчас не находит в БД продукты по UUID просто как пример
-    @Override
-    public OrderSaveDto createOrder(OrderSaveDto orderSaveDto) {
-//        // Получаем список объектов Product по списку UUID из OrderSaveDto
-//        log.info("Попытка получить список продуктов по id {}", orderSaveDto.getProduct());
-//        List<Product> productList = productRepository.findAllById(orderSaveDto.getProduct());
-//
-//        // Создаем новый объект Order на основе OrderSaveDto
-//        Order order = Order.builder()
-//                .id(UUID.randomUUID()) // Генерируем новый UUID для заказа
-//                .product(productList) // Помещаем список объектов Product
-//                .dateTime(orderSaveDto.getDateTime())
-//                .totalPrice(orderSaveDto.getTotalPrice())
-//                .status(orderSaveDto.getStatus())
-//                .user(User.builder().id(orderSaveDto.getUserId()).build()) // Используем только id пользователя для связи
-//                .build();
-//
-//        // Сохраняем заказ в репозитории базы данных
-//        Order savedOrder = orderRepository.save(order);
-//        log.info("Заказ с id {} сохранен в базе данных", savedOrder.getId());
-//
-//        // Создаем и возвращаем новый OrderSaveDto на основе сохраненного объекта Order
-//        return OrderSaveDto.builder()
-//                .product(orderSaveDto.getProduct())
-//                .dateTime(savedOrder.getDateTime())
-//                .totalPrice(savedOrder.getTotalPrice())
-//                .status(savedOrder.getStatus())
-//                .userId(savedOrder.getUser().getId())
-//                .build();
-        return null;
-    }
-
     @Override
     public OrderDto createOrder(UUID user_id) {
         log.info("Создание нового заказа пользователя c id: {}", user_id);

@@ -14,5 +14,5 @@ import java.util.UUID;
 public class CartDto {
     private UUID userId;
     private Set<CartItemDto> cartItems;
-    private Integer TotalCot;
+    private Integer TotalCost;
 }

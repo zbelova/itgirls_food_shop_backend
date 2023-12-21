@@ -12,7 +12,7 @@ public interface OrderService {
     List<OrderGetAllDto> getAllOrdersByUserId(UUID id);
     List<OrderGetAllDto> getAllOrders();
     OrderGetAllDto getOrderById(UUID id);
-    OrderSaveDto createOrder(OrderSaveDto orderSaveDto);
+
     OrderDto createOrder(UUID user_id);
     void updateOrderItemQuantity(UUID orderId, UUID productId, int quantity);
     void addProductToOrder(UUID orderId, UUID productId, int quantity);

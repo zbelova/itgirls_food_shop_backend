@@ -40,17 +40,6 @@ public class OrderController {
         return orderService.getOrderById(UUID.fromString(id));
     }
 
-    // TODO сейчас не находит в БД продукты по UUID просто как пример, выпилить
-    /*@PostMapping("/saveOrder")
-    @Operation(summary = "Добавление заказа")
-    public ResponseEntity<OrderSaveDto> createOrder(@RequestBody @Valid OrderSaveDto orderSaveDto) {
-        // Вызываем метод сервиса для создания заказа
-        OrderSaveDto savedOrder = orderService.createOrder(orderSaveDto);
-
-        // Возвращаем HTTP-ответ со статусом 200 OK и сохраненным заказом в теле ответа
-        return ResponseEntity.ok(savedOrder);
-    }*/
-
     @PostMapping("/saveOrder")
     @Operation(summary = "Добавление заказа")
     public OrderDto createOrder(@RequestParam("user_id") String user_id) {
