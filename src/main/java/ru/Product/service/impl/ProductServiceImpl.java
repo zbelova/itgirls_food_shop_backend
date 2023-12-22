@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Map<UUID, Integer> getProductsInStock(List<UUID> productIds) {
-        log.info("Получение количества продуктов в наличии для списка продуктов: {}", productIds);
+        log.info("Получение количества продуктов в наличии: {}", productIds);
         Map<UUID, Integer> productsInStock = new HashMap<>();
         for (UUID productId : productIds) {
             Optional<Product> optionalProduct = productRepository.findById(productId);
@@ -139,7 +139,7 @@ public class ProductServiceImpl implements ProductService {
                 log.info("Найден продукт: {}", product);
                 int quantityInStock = product.getQuantity();
                 productsInStock.put(productId, quantityInStock);
-                log.info("Продукт с id {} в наличии: {}", productId, quantityInStock);
+                log.info("Продукт с id {} в наличии: {} шт.", productId, quantityInStock);
             } else {
                 throw new NotFoundException("Продукт с id: " + productId + " не найден");
             }
