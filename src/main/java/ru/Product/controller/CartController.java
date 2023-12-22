@@ -41,4 +41,10 @@ public class CartController {
     ) {
         cartService.removeProductFromCart(UUID.fromString(userId), UUID.fromString(productId), 1);
     }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "Очистить корзину")
+    public void clearCart(@Parameter(description = "ID пользователя", required = true) @RequestParam("userId") String userId) {
+        cartService.clearCart(UUID.fromString(userId));
+    }
 }

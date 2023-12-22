@@ -117,7 +117,19 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void clearCart(UUID userId) {
-        log.info("Удаление всех продуктов из корзины");
+        log.info("Очистка корзины пользователя: {}", userId);
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            log.error("Пользователь не найден с id: {}", userId);
+            throw new NotFoundException("Пользователь с id " + userId + " не найден");
+        } else {
+            Optional<Cart> cartOptional = cartRepository.findByUserId(userId);
+            if (cartOptional.isPresent()) {
+                Cart cart = cartOptional.get();
+                log.error("Очистка корзины id: {}", cart.getId());
+                cartItemRepository.deleteCartItemByCartId(cart.getId());
+            }
+        }
     }
 
     private Cart createCart(User user) {
