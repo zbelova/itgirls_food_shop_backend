@@ -48,7 +48,7 @@ public class ProductController {
     @GetMapping("/getProductsInStock")
     @Operation(summary = "Получить количество продуктов в наличии")
     public Map<UUID, Integer> getProductsInStock(
-            @Parameter(description = "id продукта", required = true) @RequestParam List<UUID> productIds
+            @Parameter(description = "Список id продукта", required = true) @RequestParam(value = "id продукта") List<UUID> productIds
     ) {
         return productService.getProductsInStock(productIds);
     }
