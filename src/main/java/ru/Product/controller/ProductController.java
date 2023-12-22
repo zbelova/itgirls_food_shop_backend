@@ -13,6 +13,7 @@ import ru.Product.dto.ProductUpdateDto;
 import ru.Product.service.ProductService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -44,6 +45,14 @@ public class ProductController {
         return productService.getAllFromOneCategory(UUID.fromString(id));
     }
 
+    @GetMapping("/getProductsInStock")
+    @Operation(summary = "Получить количество продуктов в наличии")
+    public Map<UUID, Integer> getProductsInStock(
+            @Parameter(description = "Список id продукта", required = true) @RequestParam(value = "id продукта") List<UUID> productIds
+    ) {
+        return productService.getProductsInStock(productIds);
+    }
+
     @PostMapping("/create")
     @Operation(summary = "Создание нового продукта")
     public ProductDto createProduct(@RequestBody @Valid ProductCreateDto productCreateDto) {
@@ -64,6 +73,4 @@ public class ProductController {
         UUID productId = productDto.getId();
         productService.deleteProduct(productId);
     }
-
-
 }

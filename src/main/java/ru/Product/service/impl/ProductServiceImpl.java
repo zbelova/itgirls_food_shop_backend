@@ -13,10 +13,7 @@ import ru.Product.repository.CategoryRepository;
 import ru.Product.repository.ProductRepository;
 import ru.Product.service.ProductService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -129,6 +126,24 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(UUID id) {
         log.info("Удаление продукта с id: {}", id);
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public Map<UUID, Integer> getProductsInStock(List<UUID> productIds) {
+        log.info("Получение количества продукта с id: {}", productIds);
+        Map<UUID, Integer> productsInStock = new HashMap<>();
+        for (UUID productId : productIds) {
+            Optional<Product> optionalProduct = productRepository.findById(productId);
+            if (optionalProduct.isPresent()) {
+                Product product = optionalProduct.get();
+                int quantityInStock = product.getQuantity();
+                productsInStock.put(productId, quantityInStock);
+                log.info("Продукт с id {} есть в наличии: {} шт.", productId, quantityInStock);
+            } else {
+                throw new NotFoundException("Продукт с id: " + productId + " не найден");
+            }
+        }
+        return productsInStock;
     }
 
     private Product convertToProductEntity(ProductCreateDto productCreateDto) {

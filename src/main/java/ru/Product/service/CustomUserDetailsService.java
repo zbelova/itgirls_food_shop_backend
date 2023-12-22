@@ -1,4 +1,4 @@
-package ru.Product.repository;
+package ru.Product.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.Product.model.User;
+import ru.Product.repository.UserRepository;
 
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -5,6 +5,7 @@ import ru.Product.dto.ProductDto;
 import ru.Product.dto.ProductUpdateDto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface ProductService {
@@ -19,4 +20,5 @@ public interface ProductService {
     ProductDto updateProduct(UUID id, ProductUpdateDto productUpdateDto);
 
     void deleteProduct(UUID id);
+    Map<UUID, Integer> getProductsInStock(List<UUID> productIds);
 }
