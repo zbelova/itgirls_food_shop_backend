@@ -32,24 +32,21 @@ public class ProductController {
     @GetMapping("/getOneProduct")
     @Operation(summary = "Получить продукт по id")
     public ProductDto getOneProduct(
-            @Parameter(description = "id продукта", required = true) @RequestParam String id
-    ) {
-        return productService.getOne(UUID.fromString(id));
+            @Parameter(description = "id продукта", required = true) @RequestParam String productId) {
+        return productService.getOne(UUID.fromString(productId));
     }
 
     @GetMapping("/getAllProductsFromOneCategory")
     @Operation(summary = "Получить все продукты из одной категории")
     public List<ProductDto> getAllProductsFromOneCategory(
-            @Parameter(description = "id категории", required = true) @RequestParam String id
-    ) {
+            @Parameter(description = "id категории", required = true) @RequestParam String id) {
         return productService.getAllFromOneCategory(UUID.fromString(id));
     }
 
     @GetMapping("/getProductsInStock")
     @Operation(summary = "Получить количество продуктов в наличии")
     public Map<UUID, Integer> getProductsInStock(
-            @Parameter(description = "Список id продукта", required = true) @RequestParam(value = "id продукта") List<UUID> productIds
-    ) {
+            @Parameter(description = "Список id продукта", required = true) @RequestParam(value = "id продукта") List<UUID> productIds) {
         return productService.getProductsInStock(productIds);
     }
 

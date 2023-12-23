@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityExistsException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.Product.dto.CategoryCreateDto;
@@ -22,7 +21,6 @@ import java.util.UUID;
 @SecurityRequirement(name = "Категории")
 @RequiredArgsConstructor
 public class CategoryController {
-
     private final CategoryService categoryService;
 
     @GetMapping("/getAll")
@@ -34,14 +32,13 @@ public class CategoryController {
     @GetMapping("/getOne")
     @Operation(summary = "Получить категорию по id")
     public CategoryDto getCategory(
-            @Parameter(description = "id категории", required = true) @RequestParam String id
-    ) {
-        return categoryService.getOne(UUID.fromString(id));
+            @Parameter(description = "id категории", required = true) @RequestParam String categoryId) {
+        return categoryService.getOne(UUID.fromString(categoryId));
     }
 
     @PostMapping("/create")
     @Operation(summary = "Создание новой категории")
-    public ResponseEntity  createCategory(@RequestBody @Valid CategoryCreateDto categoryCreateDto) {
+    public ResponseEntity createCategory(@RequestBody @Valid CategoryCreateDto categoryCreateDto) {
         try {
             CategoryDto createdCategory = categoryService.createCategory(categoryCreateDto);
             return ResponseEntity.ok(createdCategory);
@@ -57,11 +54,9 @@ public class CategoryController {
         try {
             CategoryDto updatedCategory = categoryService.updateCategory(categoryId, categoryUpdateDto);
             return ResponseEntity.ok(updatedCategory);
-        }
-        catch (EntityExistsException e) {
+        } catch (EntityExistsException e) {
             return ResponseEntity.badRequest().body("Такая категория уже существует");
         }
-
     }
 
     @DeleteMapping("/delete")

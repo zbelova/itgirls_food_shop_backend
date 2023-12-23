@@ -17,14 +17,13 @@ import java.util.UUID;
 @SecurityRequirement(name = "Заказы")
 @RequiredArgsConstructor
 public class OrderController {
-
     private final OrderService orderService;
 
     @GetMapping("getAllOrdersByUserId")
     @Operation(summary = "Получение всех заказов пользователя по id")
     public List<OrderGetAllDto> getAllOrdersByUserId(
-            @Parameter(description = "id пользователя", required = true) @RequestParam(value = "id") String id) {
-        return orderService.getAllOrdersByUserId(UUID.fromString(id));
+            @Parameter(description = "id пользователя", required = true) @RequestParam(value = "UserId") String UserId) {
+        return orderService.getAllOrdersByUserId(UUID.fromString(UserId));
     }
 
     @GetMapping("/getAllOrders")
@@ -36,14 +35,15 @@ public class OrderController {
     @GetMapping("/getOrderById")
     @Operation(summary = "Получение заказов по id")
     public OrderGetAllDto getOrderById(
-            @Parameter(description = "id заказа", required = true) @RequestParam(value = "id") String id) {
-        return orderService.getOrderById(UUID.fromString(id));
+            @Parameter(description = "id заказа", required = true) @RequestParam(value = "OrderId") String OrderId) {
+        return orderService.getOrderById(UUID.fromString(OrderId));
     }
 
     @PostMapping("/saveOrder")
     @Operation(summary = "Добавление заказа")
-    public OrderDto createOrder(@RequestParam("user_id") String user_id) {
-        return orderService.createOrder(UUID.fromString(user_id));
+    public OrderDto createOrder(
+            @Parameter(description = "id пользователя", required = true) @RequestParam("UserId") String UserId) {
+        return orderService.createOrder(UUID.fromString(UserId));
     }
 
     @PutMapping("/updateProductQuantityInOrder")

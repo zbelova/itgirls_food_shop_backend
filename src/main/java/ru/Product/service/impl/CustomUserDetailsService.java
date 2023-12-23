@@ -1,4 +1,4 @@
-package ru.Product.service;
+package ru.Product.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
