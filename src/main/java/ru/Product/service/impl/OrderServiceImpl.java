@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
-import ru.Product.dto.*;
+import ru.Product.dto.OrderDto;
+import ru.Product.dto.OrderGetAllDto;
+import ru.Product.dto.OrderedProductDto;
+import ru.Product.dto.UserDto;
 import ru.Product.dto.mapper.OrderDtoMapper;
 import ru.Product.model.*;
 import ru.Product.repository.OrderRepository;
@@ -23,7 +26,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderServiceImpl implements OrderService {
-
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
@@ -93,28 +95,28 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto createOrder(UUID user_id) {
-        log.info("Создание нового заказа пользователя c id: {}", user_id);
+    public OrderDto createOrder(UUID UserId) {
+        log.info("Создание нового заказа пользователя c id: {}", UserId);
         Order savedOrder = null;
-        Optional<User> userOptional = userRepository.findById(user_id);
+        Optional<User> userOptional = userRepository.findById(UserId);
         if (userOptional.isEmpty()) {
-            log.info("Пользователь не найден c id: {}", user_id);
-            throw new NotFoundException("Пользователь не найден с id: " + user_id);
+            log.info("Пользователь не найден c id: {}", UserId);
+            throw new NotFoundException("Пользователь не найден с id: " + UserId);
         } else {
             User user = userOptional.get();
             Cart cart = user.getCart();
             if ((cart == null)) {
-                log.info("Корзина пользователя с id {} не найдена", user_id);
-                throw new NotFoundException("Корзина пользователя  с id " + user_id + " не найдена");
+                log.info("Корзина пользователя с id {} не найдена", UserId);
+                throw new NotFoundException("Корзина пользователя  с id " + UserId + " не найдена");
             } else {
                 Set<CartItem> cartItems = cart.getCartItems();
                 if (cartItems.isEmpty()) {
-                    log.info("Корзина пользователя с id {} пуста", user_id);
-                    throw new NotFoundException("Корзина пользователя с id " + user_id + " пуста");
+                    log.info("Корзина пользователя с id {} пуста", UserId);
+                    throw new NotFoundException("Корзина пользователя с id " + UserId + " пуста");
                 } else {
                     Order order = createUserOrderFromCart(user, cart);
                     savedOrder = orderRepository.save(order);
-                    cartService.clearCart(user_id);
+                    cartService.clearCart(UserId);
                     log.info("Заказ создан c id: {}", savedOrder.getId());
                 }
             }
@@ -212,33 +214,13 @@ public class OrderServiceImpl implements OrderService {
                 .user(user)
                 .dateTime(LocalDate.now())
                 .address(user.getAddress())
-                .status("Created")
+                .status("Создан")
                 .totalPrice(cart.calculateItemsCost())
                 .build();
         Set<OrderedProduct> orderedProducts = getOrderedProducts(cart, order);
         order.setOrderedProducts(orderedProducts);
         return order;
     }
-
-//    private ProductDto convertToProductDto(Product product) {
-//        return ProductDto.builder()
-//                .id(product.getId())
-//                .name(product.getName())
-//                .description(product.getDescription())
-//                .image(product.getImage())
-//                .price(product.getPrice())
-//                .quantity(product.getQuantity())
-//                .category(convertToCategoryDto(product.getCategory()))
-//                .build();
-//    }
-
-//    private CategoryDto convertToCategoryDto(Category category) {
-//        return CategoryDto.builder()
-//                .id(category.getId())
-//                .name(category.getName())
-//                .image(category.getImage())
-//                .build();
-//    }
 
     private OrderGetAllDto convertOrderToProductDto(Order order) {
         log.info("Преобразование заказа в список продуктов с id: {}", order.getId());

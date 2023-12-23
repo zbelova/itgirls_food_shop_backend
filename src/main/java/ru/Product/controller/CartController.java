@@ -28,8 +28,7 @@ public class CartController {
     @Operation(summary = "Добавить продукт в корзину")
     public void addProductToCart(
             @Parameter(description = "ID пользователя", required = true) @RequestParam("userId") String userId,
-            @Parameter(description = "ID продукта", required = true) @RequestParam("productId") String productId
-    ) {
+            @Parameter(description = "ID продукта", required = true) @RequestParam("productId") String productId) {
         cartService.addProductToCart(UUID.fromString(userId), UUID.fromString(productId), 1);
     }
 
@@ -37,8 +36,7 @@ public class CartController {
     @Operation(summary = "Убрать продукт из корзины")
     public void removeProductFromCart(
             @Parameter(description = "ID пользователя", required = true) @RequestParam("userId") String userId,
-            @Parameter(description = "ID продукта", required = true) @RequestParam("productId") String productId
-    ) {
+            @Parameter(description = "ID продукта", required = true) @RequestParam("productId") String productId) {
         cartService.removeProductFromCart(UUID.fromString(userId), UUID.fromString(productId), 1);
     }
 

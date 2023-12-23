@@ -1,4 +1,5 @@
 package ru.Product.dto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -8,10 +9,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -40,5 +41,4 @@ public class ProductCreateDto {
 
     @Schema(requiredMode = NOT_REQUIRED, description = "Изображение")
     private String image;
-
 }
