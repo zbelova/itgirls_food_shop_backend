@@ -52,4 +52,9 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @Operation(summary = "Получить данные пользователя по email")
+    @GetMapping("/getUserByEmail")
+    UserDto getUser(@RequestParam("email") String email) {
+        return userService.getUserByEmail(email);
+    }
 }

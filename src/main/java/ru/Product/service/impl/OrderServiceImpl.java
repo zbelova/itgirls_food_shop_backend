@@ -95,28 +95,28 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto createOrder(UUID UserId) {
-        log.info("Создание нового заказа пользователя c id: {}", UserId);
+    public OrderDto createOrder(UUID userId) {
+        log.info("Создание нового заказа пользователя c id: {}", userId);
         Order savedOrder = null;
-        Optional<User> userOptional = userRepository.findById(UserId);
+        Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
-            log.info("Пользователь не найден c id: {}", UserId);
-            throw new NotFoundException("Пользователь не найден с id: " + UserId);
+            log.info("Пользователь не найден c id: {}", userId);
+            throw new NotFoundException("Пользователь не найден с id: " + userId);
         } else {
             User user = userOptional.get();
             Cart cart = user.getCart();
             if ((cart == null)) {
-                log.info("Корзина пользователя с id {} не найдена", UserId);
-                throw new NotFoundException("Корзина пользователя  с id " + UserId + " не найдена");
+                log.info("Корзина пользователя с id {} не найдена", userId);
+                throw new NotFoundException("Корзина пользователя  с id " + userId + " не найдена");
             } else {
                 Set<CartItem> cartItems = cart.getCartItems();
                 if (cartItems.isEmpty()) {
-                    log.info("Корзина пользователя с id {} пуста", UserId);
-                    throw new NotFoundException("Корзина пользователя с id " + UserId + " пуста");
+                    log.info("Корзина пользователя с id {} пуста", userId);
+                    throw new NotFoundException("Корзина пользователя с id " + userId + " пуста");
                 } else {
                     Order order = createUserOrderFromCart(user, cart);
                     savedOrder = orderRepository.save(order);
-                    cartService.clearCart(UserId);
+                    cartService.clearCart(userId);
                     log.info("Заказ создан c id: {}", savedOrder.getId());
                 }
             }

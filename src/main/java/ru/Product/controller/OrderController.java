@@ -22,8 +22,8 @@ public class OrderController {
     @GetMapping("getAllOrdersByUserId")
     @Operation(summary = "Получение всех заказов пользователя по id")
     public List<OrderGetAllDto> getAllOrdersByUserId(
-            @Parameter(description = "id пользователя", required = true) @RequestParam(value = "UserId") String UserId) {
-        return orderService.getAllOrdersByUserId(UUID.fromString(UserId));
+            @Parameter(description = "id пользователя", required = true) @RequestParam(value = "userId") String userId) {
+        return orderService.getAllOrdersByUserId(UUID.fromString(userId));
     }
 
     @GetMapping("/getAllOrders")
@@ -35,15 +35,15 @@ public class OrderController {
     @GetMapping("/getOrderById")
     @Operation(summary = "Получение заказов по id")
     public OrderGetAllDto getOrderById(
-            @Parameter(description = "id заказа", required = true) @RequestParam(value = "OrderId") String OrderId) {
-        return orderService.getOrderById(UUID.fromString(OrderId));
+            @Parameter(description = "id заказа", required = true) @RequestParam(value = "orderId") String orderId) {
+        return orderService.getOrderById(UUID.fromString(orderId));
     }
 
     @PostMapping("/saveOrder")
     @Operation(summary = "Добавление заказа")
     public OrderDto createOrder(
-            @Parameter(description = "id пользователя", required = true) @RequestParam("UserId") String UserId) {
-        return orderService.createOrder(UUID.fromString(UserId));
+            @Parameter(description = "id пользователя", required = true) @RequestParam("userId") String userId) {
+        return orderService.createOrder(UUID.fromString(userId));
     }
 
     @PutMapping("/updateProductQuantityInOrder")
