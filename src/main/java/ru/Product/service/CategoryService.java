@@ -12,9 +12,11 @@ public interface CategoryService {
 
     List<CategoryDto> getAll();
 
-    CategoryDto getOne(UUID id);
+    CategoryDto getOne(UUID categoryId);
 
     CategoryDto createCategory(CategoryCreateDto categoryCreateDto);
 
     CategoryDto updateCategory(UUID id, CategoryUpdateDto categoryUpdateDto);
+
+    void deleteCategory(UUID id);
 }

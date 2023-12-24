@@ -1,16 +1,15 @@
 package ru.Product.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Set;
 import java.util.UUID;
 @Entity
 @Table(name="product")
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,4 +40,10 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product")
+    private Set<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "product")
+    private Set<OrderedProduct> orderedProducts;
 }

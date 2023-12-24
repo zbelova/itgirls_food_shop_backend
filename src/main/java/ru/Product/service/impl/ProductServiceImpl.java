@@ -13,99 +13,97 @@ import ru.Product.repository.CategoryRepository;
 import ru.Product.repository.ProductRepository;
 import ru.Product.service.ProductService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
     @Override
     public List<ProductDto> getAll() {
-        log.info("Найти все продукты");
-        List<Product> productList = productRepository.findAll();
+        log.info("Поиск всех продуктов");
+        List<Product> products = productRepository.findAll();
 
-        return productList.stream()
-                .map(product -> ProductDto.builder()
-                        .id(product.getId())
-                        .name(product.getName())
-                        .description(product.getDescription())
-                        .image(product.getImage())
-                        .price(product.getPrice())
-                        .quantity(product.getQuantity())
-                        .categoryName(
-                                product.getCategory().getName()
-                        )
-                        .build()
-                ).toList();
+        return products.stream()
+                .map(product -> {
+                    log.info("Преобразование продукта в DTO");
+                    return ProductDto.builder()
+                            .id(product.getId())
+                            .name(product.getName())
+                            .description(product.getDescription())
+                            .image(product.getImage())
+                            .price(product.getPrice())
+                            .quantity(product.getQuantity())
+                            .categoryName(product.getCategory().getName())
+                            .build();
+                })
+                .toList();
     }
 
     @Override
-    public ProductDto getOne(UUID id) {
-        log.info("Попытка найти автора по id {}", id);
-        Optional<Product> product = productRepository.findById(id);
+    public ProductDto getOne(UUID productId) {
+        log.info("Поиск продукта с id: {}", productId);
+        Optional<Product> product = productRepository.findById(productId);
         if (product.isPresent()) {
-            log.info("Если продукт существует, то происходит получение продукта и его категории");
             Product foundProduct = product.get();
+            log.info("Найден продукт: {}", foundProduct);
             Category category = foundProduct.getCategory();
+            log.info("Найдена категория: {}", category);
             return convertToProductDto(foundProduct, category);
         } else {
-            log.error("Ошибка на методе получения продукта");
-            throw new NotFoundException("Продукта с таким id нет: " + id);
+            log.error("Продукт не найден с id: {}", productId);
+            throw new NotFoundException("Продукт не найден с id: " + productId);
         }
-
     }
 
     @Override
     public List<ProductDto> getAllFromOneCategory(UUID id) {
-        log.info("Попытка найти все продукты из категории по id", id);
-        Optional<Category> category =  categoryRepository.findById(id);
+        log.info("Поиск всех продуктов в категории с id: {}", id);
+        Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
-            log.info("Если категория существует, собирается список продуктов из этой категории");
             Category foundCategory = category.get();
-            List<Product> productList = productRepository.findAllByCategoryId(id);
-            List<ProductDto> productDtoList = new ArrayList<>();
-            for (Product product : productList) {
-                ProductDto productDto = new ProductDto();
-                productDto.setId(product.getId());
-                productDto.setName(product.getName());
-                productDto.setDescription(product.getDescription());
-                productDto.setImage(product.getImage());
-                productDto.setPrice(product.getPrice());
-                productDto.setQuantity(product.getQuantity());
-                productDto.setCategoryName(product.getCategory().getName());
-                productDtoList.add(productDto);
-            }
-            return productDtoList;
-
+            log.info("Найдена категория: {}", foundCategory);
+            List<Product> products = productRepository.findAllByCategoryId(id);
+            return products.stream()
+                    .map(product -> {
+                        log.info("Преобразование продукта в DTO");
+                        return ProductDto.builder()
+                                .id(product.getId())
+                                .name(product.getName())
+                                .description(product.getDescription())
+                                .image(product.getImage())
+                                .price(product.getPrice())
+                                .quantity(product.getQuantity())
+                                .categoryName(foundCategory.getName())
+                                .build();
+                    })
+                    .toList();
         } else {
-            log.error("Ошибка на методе получения продуктов из одной категории");
-            throw new NotFoundException("Категории продуктов с таким id нет: " + id);
+            log.error("Категория продуктов не найдена с id: {}", id);
+            throw new NotFoundException("Категория продуктов не найдена с id: " + id);
         }
     }
 
     @Override
     public ProductDto createProduct(ProductCreateDto productCreateDto) {
-        log.info("Создание продукта");
+        log.info("Создание нового продукта: {}", productCreateDto);
         Product newProduct = convertToProductEntity(productCreateDto);
         Product savedProduct = productRepository.save(newProduct);
         Category category = savedProduct.getCategory();
+        log.info("Продукт создан: {}", savedProduct);
         return convertToProductDto(savedProduct, category);
     }
 
     @Override
-    public ProductDto updateProduct(UUID id, ProductUpdateDto productUpdateDto) {
-        log.info("Обновление информации по продукту по id");
-        Optional<Product> optionalProduct = productRepository.findById(id);
+    public ProductDto updateProduct(UUID productId, ProductUpdateDto productUpdateDto) {
+        log.info("Обновление информации о продукте с id: {}", productId);
+        Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isPresent()) {
-            log.info("Если продукт существует, то изменить информацию о нем");
             Product existingProduct = optionalProduct.get();
+            log.info("Найден существующий продукт: {}", existingProduct);
             existingProduct.setName(productUpdateDto.getName());
             existingProduct.setCategory(categoryRepository.findByName(productUpdateDto.getCategoryName()));
             existingProduct.setDescription(productUpdateDto.getDescription());
@@ -113,18 +111,37 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.setQuantity(productUpdateDto.getQuantity());
             existingProduct.setImage(productUpdateDto.getImage());
             Product updatedProduct = productRepository.save(existingProduct);
+            log.info("Продукт обновлён: {}", updatedProduct);
             Category category = existingProduct.getCategory();
             return convertToProductDto(updatedProduct, category);
         } else {
-            log.error("Ошибка на методе поиска продукта по id");
-            throw new NotFoundException("Product not found with id: " +  id);
+            log.error("Продукт не найден с id: {}", productId);
+            throw new NotFoundException("Продукт не найден с id: " + productId);
         }
     }
 
     @Override
-    public void deleteProduct(UUID id) {
-        log.info("Удаление продукта по id");
-        productRepository.deleteById(id);
+    public void deleteProduct(UUID productId) {
+        log.info("Удаление продукта с id: {}", productId);
+        productRepository.deleteById(productId);
+    }
+
+    @Override
+    public Map<UUID, Integer> getProductsInStock(List<UUID> productIds) {
+        log.info("Получение количества продукта с id: {}", productIds);
+        Map<UUID, Integer> productsInStock = new HashMap<>();
+        for (UUID productId : productIds) {
+            Optional<Product> optionalProduct = productRepository.findById(productId);
+            if (optionalProduct.isPresent()) {
+                Product product = optionalProduct.get();
+                int quantityInStock = product.getQuantity();
+                productsInStock.put(productId, quantityInStock);
+                log.info("Продукт с id {} есть в наличии: {} шт.", productId, quantityInStock);
+            } else {
+                throw new NotFoundException("Продукт с id: " + productId + " не найден");
+            }
+        }
+        return productsInStock;
     }
 
     private Product convertToProductEntity(ProductCreateDto productCreateDto) {

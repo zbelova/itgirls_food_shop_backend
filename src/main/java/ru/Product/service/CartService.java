@@ -1,22 +1,15 @@
 package ru.Product.service;
 
-import ru.Product.dto.ProductAndPriceDto;
-import ru.Product.dto.ProductAndQuantityDto;
-import ru.Product.dto.ProductDto;
-import ru.Product.model.Product;
+import ru.Product.dto.CartDto;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public interface CartService {
-    void removeProduct(UUID id);
+    CartDto getCart(UUID userId);
 
-    void addProduct(UUID id);
+    void addProductToCart(UUID userId, UUID productId, Integer quantity);
 
-    void clear();
+    void removeProductFromCart(UUID userId, UUID productId, Integer quantity);
 
-    List<ProductAndPriceDto> getCartItemsPrice();
-    List<ProductAndQuantityDto> getCartItemsQuantity();
-
+    void clearCart(UUID userId);
 }

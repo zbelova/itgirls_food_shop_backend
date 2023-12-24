@@ -14,7 +14,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryUpdateDto {
-    @Schema(requiredMode = REQUIRED, description = "Название категории")
+    @Schema(requiredMode = REQUIRED, description = "id категории")
     private String id;
     @Schema(requiredMode = REQUIRED, description = "Название категории")
     private String name;
