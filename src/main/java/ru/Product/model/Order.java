@@ -30,13 +30,15 @@ public class Order {
     @Column(name = "total_price", nullable = false)
     private Integer totalPrice;
 
-    @Column(name = "status")
-    private String status;
-
     @Column(name = "address", nullable = false)
     private String address;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,
             targetEntity = OrderedProduct.class, mappedBy = "order")
     private Set<OrderedProduct> orderedProducts = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id")
+    private OrderStatus status;
+
 }

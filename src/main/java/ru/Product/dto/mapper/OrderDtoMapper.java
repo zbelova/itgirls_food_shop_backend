@@ -24,7 +24,7 @@ public interface OrderDtoMapper {
         return OrderDto
                 .builder()
                 .id(order.getId())
-                .status(order.getStatus())
+                .status(order.getStatus().getName())
                 .userName(order.getUser().getName())
                 .dateTime(order.getDateTime())
                 .address(order.getAddress())

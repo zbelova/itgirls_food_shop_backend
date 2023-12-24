@@ -10,10 +10,7 @@ import ru.Product.dto.OrderedProductDto;
 import ru.Product.dto.UserDto;
 import ru.Product.dto.mapper.OrderDtoMapper;
 import ru.Product.model.*;
-import ru.Product.repository.OrderRepository;
-import ru.Product.repository.OrderedProductRepository;
-import ru.Product.repository.ProductRepository;
-import ru.Product.repository.UserRepository;
+import ru.Product.repository.*;
 import ru.Product.service.CartService;
 import ru.Product.service.OrderService;
 
@@ -32,6 +29,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderedProductRepository orderedProductRepository;
     private final OrderDtoMapper orderDtoMapper;
     private final CartService cartService;
+    private final OrderStatusRepository orderStatusRepository;
+
 
     @Override
     public List<OrderGetAllDto> getAllOrdersByUserId(UUID id) {
@@ -47,7 +46,8 @@ public class OrderServiceImpl implements OrderService {
             log.info("Статус заказа с id {}: {}", order.getId(), order.getStatus());
             OrderGetAllDto orderDto = convertOrderToProductDto(order);
             orderDtoList.add(orderDto);
-        }
+
+            }
         return orderDtoList;
     }
 
@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setOrderedProducts(orderedProducts);
             orderDto.setDateTime(order.getDateTime());
             orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
-            orderDto.setStatus(order.getStatus());
+            orderDto.setStatus(order.getStatus().getName());
             orderDto.setUser(convertToUserDto(order.getUser()));
             orderDtoList.add(orderDto);
         }
@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
             OrderGetAllDto orderDto = new OrderGetAllDto();
             orderDto.setId(order.getId());
             orderDto.setOrderedProducts(convertToOrderItemDtos(order.getOrderedProducts()));
-            orderDto.setStatus(order.getStatus());
+            orderDto.setStatus(order.getStatus().getName());
             orderDto.setUser(convertToUserDto(order.getUser()));
             orderDto.setDateTime(order.getDateTime());
             orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
@@ -186,6 +186,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+
     private Set<OrderedProduct> getOrderedProducts(Cart cart, Order order) {
         log.info("Определение продуктов из корзины");
         Set<CartItem> cartItems = cart.getCartItems();
@@ -208,13 +209,14 @@ public class OrderServiceImpl implements OrderService {
 
     private Order createUserOrderFromCart(User user, Cart cart) {
         log.info("Определение параметров заказа");
+        OrderStatus orderStatus = orderStatusRepository.findByName("Создан").orElseThrow();
         Order order = Order
                 .builder()
                 .id(UUID.randomUUID())
                 .user(user)
                 .dateTime(LocalDate.now())
                 .address(user.getAddress())
-                .status("Создан")
+                .status(orderStatus)
                 .totalPrice(cart.calculateItemsCost())
                 .build();
         Set<OrderedProduct> orderedProducts = getOrderedProducts(cart, order);
@@ -242,7 +244,7 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setOrderedProducts(productDtoList);
         orderDto.setDateTime(order.getDateTime());
         orderDto.setTotalPrice(BigDecimal.valueOf(order.getTotalPrice()));
-        orderDto.setStatus(order.getStatus());
+        orderDto.setStatus(order.getStatus().getName());
         orderDto.setUser(UserDto.builder()
                 .id(order.getUser().getId())
                 .name(order.getUser().getName())
