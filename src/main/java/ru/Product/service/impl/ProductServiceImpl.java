@@ -13,16 +13,12 @@ import ru.Product.repository.CategoryRepository;
 import ru.Product.repository.ProductRepository;
 import ru.Product.service.ProductService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
@@ -48,9 +44,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto getOne(UUID id) {
-        log.info("Поиск продукта с id: {}", id);
-        Optional<Product> product = productRepository.findById(id);
+    public ProductDto getOne(UUID productId) {
+        log.info("Поиск продукта с id: {}", productId);
+        Optional<Product> product = productRepository.findById(productId);
         if (product.isPresent()) {
             Product foundProduct = product.get();
             log.info("Найден продукт: {}", foundProduct);
@@ -58,10 +54,9 @@ public class ProductServiceImpl implements ProductService {
             log.info("Найдена категория: {}", category);
             return convertToProductDto(foundProduct, category);
         } else {
-            log.error("Продукт не найден с id: {}", id);
-            throw new NotFoundException("Продукт не найден с id: " + id);
+            log.error("Продукт не найден с id: {}", productId);
+            throw new NotFoundException("Продукт не найден с id: " + productId);
         }
-
     }
 
     @Override
@@ -103,9 +98,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto updateProduct(UUID id, ProductUpdateDto productUpdateDto) {
-        log.info("Обновление информации о продукте с id: {}", id);
-        Optional<Product> optionalProduct = productRepository.findById(id);
+    public ProductDto updateProduct(UUID productId, ProductUpdateDto productUpdateDto) {
+        log.info("Обновление информации о продукте с id: {}", productId);
+        Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isPresent()) {
             Product existingProduct = optionalProduct.get();
             log.info("Найден существующий продукт: {}", existingProduct);
@@ -120,15 +115,33 @@ public class ProductServiceImpl implements ProductService {
             Category category = existingProduct.getCategory();
             return convertToProductDto(updatedProduct, category);
         } else {
-            log.error("Продукт не найден с id: {}", id);
-            throw new NotFoundException("Продукт не найден с id: " +  id);
+            log.error("Продукт не найден с id: {}", productId);
+            throw new NotFoundException("Продукт не найден с id: " + productId);
         }
     }
 
     @Override
-    public void deleteProduct(UUID id) {
-        log.info("Удаление продукта с id: {}", id);
-        productRepository.deleteById(id);
+    public void deleteProduct(UUID productId) {
+        log.info("Удаление продукта с id: {}", productId);
+        productRepository.deleteById(productId);
+    }
+
+    @Override
+    public Map<UUID, Integer> getProductsInStock(List<UUID> productIds) {
+        log.info("Получение количества продукта с id: {}", productIds);
+        Map<UUID, Integer> productsInStock = new HashMap<>();
+        for (UUID productId : productIds) {
+            Optional<Product> optionalProduct = productRepository.findById(productId);
+            if (optionalProduct.isPresent()) {
+                Product product = optionalProduct.get();
+                int quantityInStock = product.getQuantity();
+                productsInStock.put(productId, quantityInStock);
+                log.info("Продукт с id {} есть в наличии: {} шт.", productId, quantityInStock);
+            } else {
+                throw new NotFoundException("Продукт с id: " + productId + " не найден");
+            }
+        }
+        return productsInStock;
     }
 
     private Product convertToProductEntity(ProductCreateDto productCreateDto) {

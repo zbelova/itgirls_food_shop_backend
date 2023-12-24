@@ -3,19 +3,11 @@ package ru.Product.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ru.Product.dto.ProductAndPriceDto;
-import ru.Product.dto.ProductAndQuantityDto;
-import ru.Product.dto.ProductDto;
+import org.springframework.web.bind.annotation.*;
+import ru.Product.dto.CartDto;
 import ru.Product.service.CartService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,39 +17,32 @@ import java.util.UUID;
 public class CartController {
     private final CartService cartService;
 
+    @GetMapping("/getCart")
+    @Operation(summary = "Получить все продукты в корзине с общей ценой")
+    public CartDto getCart(
+            @Parameter(description = "ID пользователя", required = true) @RequestParam("userId") String userId) {
+        return cartService.getCart(UUID.fromString(userId));
+    }
 
     @PostMapping("/addProductToCart")
-    @Operation(summary = "Добавить продукт в корзину по id")
+    @Operation(summary = "Добавить продукт в корзину")
     public void addProductToCart(
-            @Parameter(description = "id продукта", required = true) @RequestParam @Valid String id
-    ) {
-        cartService.addProduct(UUID.fromString(id));
+            @Parameter(description = "ID пользователя", required = true) @RequestParam("userId") String userId,
+            @Parameter(description = "ID продукта", required = true) @RequestParam("productId") String productId) {
+        cartService.addProductToCart(UUID.fromString(userId), UUID.fromString(productId), 1);
     }
 
     @PostMapping("/removeProductFromCart")
-    @Operation(summary = "Убрать продукт из корзины по id")
+    @Operation(summary = "Убрать продукт из корзины")
     public void removeProductFromCart(
-            @Parameter(description = "id продукта", required = true) @RequestParam @Valid String id
-    ) {
-        cartService.removeProduct(UUID.fromString(id));
+            @Parameter(description = "ID пользователя", required = true) @RequestParam("userId") String userId,
+            @Parameter(description = "ID продукта", required = true) @RequestParam("productId") String productId) {
+        cartService.removeProductFromCart(UUID.fromString(userId), UUID.fromString(productId), 1);
     }
 
-    @PostMapping("/removeAllProductsFromCart")
-    @Operation(summary = "Убрать все продукты из корзины")
-    public void removeAllProductsFromCart() {
-        cartService.clear();
+    @DeleteMapping("/delete")
+    @Operation(summary = "Очистить корзину")
+    public void clearCart(@Parameter(description = "ID пользователя", required = true) @RequestParam("userId") String userId) {
+        cartService.clearCart(UUID.fromString(userId));
     }
-
-    @GetMapping("/getCart")
-    @Operation(summary = "Получить все продукты в корзине с общей ценой")
-    public List<ProductAndPriceDto> getCart() {
-        return cartService.getCartItemsPrice();
-    }
-
-    @GetMapping("/getProductsInStock")
-    @Operation(summary = "По списку продуктов получить количество в наличии")
-    public List<ProductAndQuantityDto> getProductsInStock() {
-        return cartService.getCartItemsQuantity();
-    }
-
 }

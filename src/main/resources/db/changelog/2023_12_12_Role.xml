@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="create-role-table" author="Mariia_Buruk">
+        <sql>
+            CREATE TABLE IF NOT EXISTS role (
+            id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+            name varchar NOT NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="insert-into-roles" author="Mariia_Buruk">
+        <sql>
+            insert into role values
+            (uuid_generate_v4(),'ROLE_ADMIN'),
+            (uuid_generate_v4(),'ROLE_USER');
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="create-user-roles-table" author="Mariia_Buruk">
+        <sql>
+            CREATE TABLE IF NOT EXISTS user_role (
+            user_id UUID UNIQUE NOT NULL,
+            role_id UUID UNIQUE NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES "user"(id),
+            FOREIGN KEY (role_id) REFERENCES "role"(id)
+            );
+
+            INSERT INTO user_role (user_id, role_id)
+            Select
+            (select "user".id from "user" where "user".email = 'test@mail.ru'),
+            (select "role".id from "role" where "role".name = 'ROLE_USER');
+
+            INSERT INTO "user"("id","name", email, phone, address, password) values
+            (uuid_generate_v4(),
+            'Admin',
+            'admin@mail.ru',
+            '',
+            '',
+            '$2a$10$akEvy2E5zT5Ym2o6dzPpxOmfH64XW3wUsFWU7o0LDIx5bdWsvYklq'
+            );
+
+            INSERT INTO user_role (user_id, role_id)
+            Select
+            (select "user".id from "user" where "user".email = 'admin@mail.ru'),
+            (select "role".id from "role" where "role".name = 'ROLE_ADMIN');
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,5 +1,6 @@
 package ru.Product.service.impl;
 
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
-
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -32,39 +32,51 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getOne(UUID id) {
-        log.info("Поиск категории с id: {}", id);
-        Optional<Category> category = categoryRepository.findById(id);
+    public CategoryDto getOne(UUID categoryId) {
+        log.info("Поиск категории с id: {}", categoryId);
+        Optional<Category> category = categoryRepository.findById(categoryId);
         if (category.isPresent()) {
             Category foundCategory = category.get();
             log.info("Найдена категория: {}", foundCategory);
             return convertToCategoryDto(foundCategory);
         } else {
-            log.error("Категория не найдена с id: {}", id);
-            throw new NotFoundException("Категория не найдена с id: " + id);
+            log.error("Категория не найдена с id: {}", categoryId);
+            throw new NotFoundException("Категория не найдена с id: " + categoryId);
         }
     }
 
     @Override
     public CategoryDto createCategory(CategoryCreateDto categoryCreateDto) {
         log.info("Создание новой категории: {}", categoryCreateDto);
-        Category newCategory = convertToCategoryEntity(categoryCreateDto);
-        Category savedCategory = categoryRepository.save(newCategory);
-        log.info("Категория создана: {}", savedCategory);
-        return convertToCategoryDto(savedCategory);
+        String name = categoryCreateDto.getName();
+        Category optionalCategory = categoryRepository.findByName(name);
+        if (optionalCategory != null)
+            throw new EntityExistsException("Category with name " + name + " already  exists");
+        else {
+            Category newCategory = convertToCategoryEntity(categoryCreateDto);
+            Category savedCategory = categoryRepository.save(newCategory);
+            log.info("Категория создана: {}", savedCategory);
+            return convertToCategoryDto(savedCategory);
+        }
     }
 
     @Override
     public CategoryDto updateCategory(UUID id, CategoryUpdateDto categoryUpdateDto) {
         log.info("Обновление информации о категории с id: {}", id);
         Optional<Category> optionalCategory = categoryRepository.findById(id);
+        String newNameCategory = categoryUpdateDto.getName();
+        Category foundCategory = categoryRepository.findByName(newNameCategory);
         if (optionalCategory.isPresent()) {
             Category existingCategory = optionalCategory.get();
-            existingCategory.setName(categoryUpdateDto.getName());
-            existingCategory.setImage(categoryUpdateDto.getImage());
-            Category updatedCategory = categoryRepository.save(existingCategory);
-            log.info("Категория обновлена: {}", updatedCategory);
-            return convertToCategoryDto(updatedCategory);
+            if (foundCategory != null)
+                throw new EntityExistsException("Category with name " + newNameCategory + " already  exists");
+            else {
+                existingCategory.setName(categoryUpdateDto.getName());
+                existingCategory.setImage(categoryUpdateDto.getImage());
+                Category updatedCategory = categoryRepository.save(existingCategory);
+                log.info("Название категории изменено: {}", updatedCategory);
+                return convertToCategoryDto(updatedCategory);
+            }
         } else {
             log.error("Категория не найдена с id: {}", id);
             throw new NotFoundException("Category not found with id: " + id);
